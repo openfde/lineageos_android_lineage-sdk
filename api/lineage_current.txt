@@ -1181,3 +1181,60 @@ package lineageos.weatherservice {
 
 }
 
+package lineageos.waydroid {
+
+  public class AppInfo implements android.os.Parcelable {
+    ctor public AppInfo();
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    method public void readFromParcel(android.os.Parcel);
+  }
+
+  public class Clipboard {
+    method public static lineageos.waydroid.Clipboard getInstance(android.content.Context);
+    method public static lineageos.waydroid.Clipboard getService();
+    method public void sendClipboardData(String);
+    method public String getClipboardData();
+  }
+
+  public class Hardware {
+    method public static lineageos.waydroid.Hardware getInstance(android.content.Context);
+    method public static lineageos.waydroid.Hardware getService();
+    field public static final int ERROR_UNDEFINED = -1; // 0xffffffff
+    method public int enableNFC(boolean);
+    method public int enableBluetooth(boolean);
+    method public void suspend();
+  }
+
+  public class Platform {
+    method public static lineageos.waydroid.Platform getInstance(android.content.Context);
+    method public static lineageos.waydroid.Platform getService();
+    field public static final int ERROR_UNDEFINED = -1; // 0xffffffff
+    field public static final int SETTINGS_SECURE = 0; // 0x0
+    field public static final int SETTINGS_SYSTEM = 1; // 0x1
+    field public static final int SETTINGS_GLOBAL = 2; // 0x2
+    method public String getprop(String, String);
+    method public void setprop(String, String);
+    method public java.util.List<lineageos.waydroid.AppInfo> getAppsInfo();
+    method public lineageos.waydroid.AppInfo getAppInfo(String);
+    method public int installApp(String);
+    method public int removeApp(String);
+    method public void launchApp(String);
+    method public String getAppName(String);
+    method public void settingsPutString(int, String, String);
+    method public String settingsGetString(int, String);
+    method public void settingsPutInt(int, String, int);
+    method public int settingsGetInt(int, String);
+  }
+
+  public class UserMonitor {
+    method public static lineageos.waydroid.UserMonitor getInstance(android.content.Context);
+    method public static lineageos.waydroid.UserMonitor getService();
+    field public static final int WAYDROID_PACKAGE_ADDED = 0; // 0x0
+    field public static final int WAYDROID_PACKAGE_REMOVED = 1; // 0x1
+    field public static final int WAYDROID_PACKAGE_UPDATED = 2; // 0x2
+    method public void userUnlocked(int);
+    method public void packageStateChanged(int, String, int);
+  }
+
+}

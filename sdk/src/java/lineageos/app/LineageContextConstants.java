@@ -109,6 +109,34 @@ public final class LineageContextConstants {
     public static final String LINEAGE_TRUST_INTERFACE = "lineagetrust";
 
     /**
+     * Manages waydroid platform
+     *
+     * @hide
+     */
+    public static final String WAYDROID_PLATFORM_SERVICE = "waydroidplatform";
+
+    /**
+     * Manages waydroid clipboard
+     *
+     * @hide
+     */
+    public static final String WAYDROID_CLIPBOARD_SERVICE = "waydroidclipboard";
+
+    /**
+     * Manages waydroid hardware
+     *
+     * @hide
+     */
+    public static final String WAYDROID_HARDWARE_SERVICE = "waydroidhardware";
+
+    /**
+     * Monitors waydroid user
+     *
+     * @hide
+     */
+    public static final String WAYDROID_USERMONITOR_SERVICE = "waydroidusermonitor";
+
+    /**
      * Update power menu (GlobalActions)
      *
      * @hide
