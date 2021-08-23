@@ -113,4 +113,28 @@ public class Hardware {
         }
         return;
     }
+
+    public void reboot() {
+        if (sService == null) {
+            return;
+        }
+        try {
+            sService.reboot();
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
+
+    public void upgrade(String system_zip, int system_time, String vendor_zip, int vendor_time) {
+        if (sService == null) {
+            return;
+        }
+        try {
+            sService.upgrade(system_zip, system_time, vendor_zip, vendor_time);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
 }

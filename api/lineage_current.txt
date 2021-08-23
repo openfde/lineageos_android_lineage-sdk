@@ -1204,6 +1204,8 @@ package lineageos.waydroid {
     method public int enableNFC(boolean);
     method public int enableBluetooth(boolean);
     method public void suspend();
+    method public void reboot();
+    method public void upgrade(String, int, String, int);
   }
 
   public class Platform {

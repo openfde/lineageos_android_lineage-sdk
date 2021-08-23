@@ -21,4 +21,6 @@ interface IHardware {
     int enableNFC(boolean enable);
     int enableBluetooth(boolean enable);
     void suspend();
+    void reboot();
+    void upgrade(String system_zip, int system_time, String vendor_zip, int vendor_time);
 }
