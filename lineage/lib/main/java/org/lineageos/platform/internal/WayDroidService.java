@@ -78,7 +78,6 @@ public class WayDroidService extends LineageSystemService {
         } else {
             Log.w(TAG, "No context available");
         }
-        publishBinderService(LineageContextConstants.WAYDROID_PLATFORM_SERVICE, mPlatformService);
     }
 
     @Override
@@ -88,6 +87,7 @@ public class WayDroidService extends LineageSystemService {
 
     @Override
     public void onStart() {
+        publishBinderService(LineageContextConstants.WAYDROID_PLATFORM_SERVICE, mPlatformService);
         if (mContext != null) {
             if (UserMonitor.getService() != null)
                 mUM = UserMonitor.getInstance(mContext);
@@ -150,6 +150,8 @@ public class WayDroidService extends LineageSystemService {
                 }
             }
         }
+        imageFile.setReadable(true, false);
+        imageFile.setWritable(true, false);
     }
 
     private Bitmap drawableToBitmap(Drawable drawable) {
