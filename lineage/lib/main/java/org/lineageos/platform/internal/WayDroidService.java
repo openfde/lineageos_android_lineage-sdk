@@ -89,8 +89,7 @@ public class WayDroidService extends LineageSystemService {
     public void onStart() {
         publishBinderService(LineageContextConstants.WAYDROID_PLATFORM_SERVICE, mPlatformService);
         if (mContext != null) {
-            if (UserMonitor.getService() != null)
-                mUM = UserMonitor.getInstance(mContext);
+            mUM = UserMonitor.getInstance(mContext);
         } else {
             Log.w(TAG, "No context available");
         }

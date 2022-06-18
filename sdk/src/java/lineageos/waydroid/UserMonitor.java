@@ -40,11 +40,6 @@ public class UserMonitor {
         Context appContext = context.getApplicationContext();
         mContext = appContext == null ? context : appContext;
         sService = getService();
-        if (sService == null) {
-            throw new RuntimeException("Unable to get WayDroidService. The service" +
-                    " either crashed, was not started, or the interface has been called to early" +
-                    " in SystemServer init");
-                }
     }
 
     /**
@@ -78,11 +73,12 @@ public class UserMonitor {
 
     /** @hide **/
     public void userUnlocked(int uid) {
-        if (sService == null) {
+        IUserMonitor service = getService();
+        if (service == null) {
             return;
         }
         try {
-            sService.userUnlocked(uid);
+            service.userUnlocked(uid);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
@@ -90,11 +86,12 @@ public class UserMonitor {
     }
 
     public void packageStateChanged(int mode, String packageName, int uid) {
-        if (sService == null) {
+        IUserMonitor service = getService();
+        if (service == null) {
             return;
         }
         try {
-            sService.packageStateChanged(mode, packageName, uid);
+            service.packageStateChanged(mode, packageName, uid);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
