@@ -41,11 +41,6 @@ public class Hardware {
         Context appContext = context.getApplicationContext();
         mContext = appContext == null ? context : appContext;
         sService = getService();
-        if (sService == null) {
-            throw new RuntimeException("Unable to get WayDroidService. The service" +
-                    " either crashed, was not started, or the interface has been called to early" +
-                    " in SystemServer init");
-                }
     }
 
     /**
@@ -79,11 +74,12 @@ public class Hardware {
 
     /** @hide **/
     public int enableNFC(boolean enable) {
-        if (sService == null) {
+        IHardware service = getService();
+        if (service == null) {
             return ERROR_UNDEFINED;
         }
         try {
-            return sService.enableNFC(enable);
+            return service.enableNFC(enable);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
@@ -91,11 +87,12 @@ public class Hardware {
     }
 
     public int enableBluetooth(boolean enable) {
-        if (sService == null) {
+        IHardware service = getService();
+        if (service == null) {
             return ERROR_UNDEFINED;
         }
         try {
-            return sService.enableBluetooth(enable);
+            return service.enableBluetooth(enable);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
@@ -103,11 +100,12 @@ public class Hardware {
     }
 
     public void suspend() {
-        if (sService == null) {
+        IHardware service = getService();
+        if (service == null) {
             return;
         }
         try {
-            sService.suspend();
+            service.suspend();
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
@@ -115,11 +113,12 @@ public class Hardware {
     }
 
     public void reboot() {
-        if (sService == null) {
+        IHardware service = getService();
+        if (service == null) {
             return;
         }
         try {
-            sService.reboot();
+            service.reboot();
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
@@ -127,11 +126,12 @@ public class Hardware {
     }
 
     public void upgrade(String system_zip, int system_time, String vendor_zip, int vendor_time) {
-        if (sService == null) {
+        IHardware service = getService();
+        if (service == null) {
             return;
         }
         try {
-            sService.upgrade(system_zip, system_time, vendor_zip, vendor_time);
+            service.upgrade(system_zip, system_time, vendor_zip, vendor_time);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
