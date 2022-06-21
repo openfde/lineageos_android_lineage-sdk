@@ -36,11 +36,6 @@ public class Clipboard {
         Context appContext = context.getApplicationContext();
         mContext = appContext == null ? context : appContext;
         sService = getService();
-        if (sService == null) {
-            throw new RuntimeException("Unable to get WayDroidService. The service" +
-                    " either crashed, was not started, or the interface has been called to early" +
-                    " in SystemServer init");
-                }
     }
 
     /**
@@ -74,11 +69,12 @@ public class Clipboard {
 
     /** @hide **/
     public void sendClipboardData(String value) {
-        if (sService == null) {
+        IClipboard service = getService();
+        if (service == null) {
             return;
         }
         try {
-            sService.sendClipboardData(value);
+            service.sendClipboardData(value);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
@@ -86,11 +82,12 @@ public class Clipboard {
     }
 
     public String getClipboardData() {
-        if (sService == null) {
+        IClipboard service = getService();
+        if (service == null) {
             return "";
         }
         try {
-            return sService.getClipboardData();
+            return service.getClipboardData();
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
