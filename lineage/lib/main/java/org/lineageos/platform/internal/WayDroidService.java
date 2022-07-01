@@ -17,6 +17,7 @@
 package org.lineageos.platform.internal;
 
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -368,6 +369,29 @@ public class WayDroidService extends LineageSystemService {
             }
 
             mContext.startActivity(launchIntent);
+        }
+
+        @Override
+        public String launchIntent(String action, String uri) {
+            if (mPm == null || mContext == null)
+                return "";
+
+            Intent i;
+            if (uri == null || uri.isEmpty())
+                i = new Intent(action);
+            else
+                i = new Intent(action, Uri.parse(uri));
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            ResolveInfo ri = mPm.resolveActivity(i, 0);
+            try {
+                mContext.startActivity(i);
+            } catch (ActivityNotFoundException ignored) {}
+
+            if (ri != null) {
+                return ri.activityInfo.packageName;
+            }
+            return "";
         }
 
         @Override

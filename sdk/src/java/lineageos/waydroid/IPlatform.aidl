@@ -34,4 +34,5 @@ interface IPlatform {
     String settingsGetString(int mode, String key);
     void settingsPutInt(int mode, String key, int value);
     int settingsGetInt(int mode, String key);
+    String launchIntent(String action, String uri);
 }
