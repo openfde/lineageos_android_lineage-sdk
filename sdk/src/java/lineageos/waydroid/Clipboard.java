@@ -87,7 +87,8 @@ public class Clipboard {
             return "";
         }
         try {
-            return service.getClipboardData();
+            String paste = service.getClipboardData();
+            return paste != null ? paste : "";
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
