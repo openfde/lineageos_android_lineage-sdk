@@ -2172,6 +2172,13 @@ public final class LineageSettings {
         public static final Validator CLICK_PARTIAL_SCREENSHOT_VALIDATOR =
                 sBooleanValidator;
 
+        /** @hide */
+		public static final String CLICK_AS_TOUCH = "click_as_touch";
+
+		/** @hide */
+		public static final Validator CLICK_AS_TOUCH_VALIDATOR =
+				sBooleanValidator;
+
         /**
          * I can haz more bukkits
          * @hide
@@ -2458,6 +2465,8 @@ public final class LineageSettings {
                     FORCE_SHOW_NAVBAR_VALIDATOR);
             VALIDATORS.put(CLICK_PARTIAL_SCREENSHOT,
                     CLICK_PARTIAL_SCREENSHOT_VALIDATOR);
+			VALIDATORS.put(CLICK_AS_TOUCH,
+                    CLICK_AS_TOUCH_VALIDATOR);
             VALIDATORS.put(__MAGICAL_TEST_PASSING_ENABLER,
                     __MAGICAL_TEST_PASSING_ENABLER_VALIDATOR);
         };
