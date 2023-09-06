@@ -125,15 +125,28 @@ public class Hardware {
         return;
     }
 
-    public void upgrade(String system_zip, int system_time, String vendor_zip, int vendor_time) {
+    public void upgrade(String system_zip, long system_time, String vendor_zip, long vendor_time) {
         IHardware service = getService();
         if (service == null) {
             return;
         }
         try {
-            service.upgrade(system_zip, system_time, vendor_zip, vendor_time);
-        } catch (RemoteException e) {
-            Log.e(TAG, e.getLocalizedMessage(), e);
+            service.upgrade2(system_zip, system_time, vendor_zip, vendor_time);
+            // HACK: if we were not killed yet, the call was not implemented on the host side.
+            // Fallback to the previous version
+            Log.d(TAG, "IHardware.upgrade2 not implemented (detected through timeout), falling back to IHardware.upgrade");
+            try {
+                service.upgrade(system_zip, (int)system_time, vendor_zip, (int)vendor_time);
+            } catch (RemoteException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+            }
+        } catch (RemoteException | RuntimeException ignored) {
+            Log.d(TAG, "IHardware.upgrade2 not implemented, falling back to IHardware.upgrade");
+            try {
+                service.upgrade(system_zip, (int)system_time, vendor_zip, (int)vendor_time);
+            } catch (RemoteException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+            }
         }
         return;
     }
