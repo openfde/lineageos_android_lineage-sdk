@@ -101,7 +101,7 @@ public class WayDroidService extends LineageSystemService {
 
     @Override
     public void onUnlockUser(int userHandle) {
-        List<ApplicationInfo> apps = mPm.getInstalledApplications(0);
+        /*List<ApplicationInfo> apps = mPm.getInstalledApplications(0);
         for (int n = 0; n < apps.size(); n++) {
             ApplicationInfo appInfo = apps.get(n);
 
@@ -110,7 +110,7 @@ public class WayDroidService extends LineageSystemService {
                 continue;
             }
             saveApplicationIcon(appInfo.packageName);
-        }
+        }*/
         if (mUM != null) {
             mUM.userUnlocked(userHandle);
         }
@@ -170,6 +170,10 @@ public class WayDroidService extends LineageSystemService {
         PackageMonitor monitor = new PackageMonitor() {
             @Override
             public void onPackageAdded(String packageName, int uid) {
+                if(true){
+                    Log.e(TAG, "onPackageAdded " + packageName);
+                    return;
+                }
                 if (mUM != null) {
                     mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName, uid);
                 }
@@ -178,6 +182,10 @@ public class WayDroidService extends LineageSystemService {
 
             @Override
             public void onPackageRemoved(String packageName, int uid) {
+                if(true){
+                    Log.e(TAG, "onPackageRemoved " + packageName);
+                    return;
+                }
                 if (mUM != null) {
                     mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_REMOVED, packageName, uid);
                 }
@@ -188,6 +196,10 @@ public class WayDroidService extends LineageSystemService {
 
             @Override
             public void onPackageUpdateFinished(String packageName, int uid) {
+                if(true){
+                    Log.e(TAG, "onPackageUpdateFinished " + packageName);
+                    return;
+                }
                 if (mUM != null) {
                     mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_UPDATED, packageName, uid);
                 }
