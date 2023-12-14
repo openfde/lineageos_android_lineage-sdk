@@ -128,6 +128,12 @@ public final class LineageContextConstants {
      * @hide
      */
     public static final String WAYDROID_HARDWARE_SERVICE = "waydroidhardware";
+	/**
+     * Manages waydroid net
+     *
+     * @hide
+     */
+    public static final String WAYDROID_NET_SERVICE = "fdenet";
 
     /**
      * Monitors waydroid user
