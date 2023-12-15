@@ -28,4 +28,5 @@ interface INet {
     int isWifiEnable();
     String getSignalAndSecurity(String ssid);
     int connectHidedWifi(String ssid, String passwd);
+    int forgetWifi(String ssid);
 }

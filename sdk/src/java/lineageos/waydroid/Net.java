@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 /**
-* Add these interfaces to the network setup 
+* 1.Add these interfaces to the network setup 
+* 2.Add forget Wifi interface
 */
 package lineageos.waydroid;
 
@@ -211,6 +212,19 @@ public class Net {
         }
         try {
             return service.connectHidedWifi(ssid, passwd);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return ERROR_UNDEFINED;
+    }
+
+    public int forgetWifi(String ssid) {
+        INet service = getService();
+        if (service == null) {
+            return ERROR_UNDEFINED;
+        }
+        try {
+            return service.forgetWifi(ssid);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
