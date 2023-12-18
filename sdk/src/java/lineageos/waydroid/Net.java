@@ -16,6 +16,7 @@
 /**
 * 1.Add these interfaces to the network setup 
 * 2.Add forget Wifi interface
+* 3.Add a interface to get static IP configure
 */
 package lineageos.waydroid;
 
@@ -229,5 +230,18 @@ public class Net {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return ERROR_UNDEFINED;
+    }
+
+    public String getStaticIpConf(String interfaceName) {
+        INet service = getService();
+        if (service == null) {
+            return null;
+        }
+        try {
+            return service.getStaticIpConf(interfaceName);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return null;
     }
 }
