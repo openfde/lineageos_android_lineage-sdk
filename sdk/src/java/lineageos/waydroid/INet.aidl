@@ -30,4 +30,6 @@ interface INet {
     int connectHidedWifi(String ssid, String passwd);
     int forgetWifi(String ssid);
     String getStaticIpConf(String interfaceName);
+    String getActivedInterface();
+    String getIpConfigure(String interfaceName);
 }
