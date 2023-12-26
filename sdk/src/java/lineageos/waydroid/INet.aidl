@@ -32,4 +32,5 @@ interface INet {
     String getStaticIpConf(String interfaceName);
     String getActivedInterface();
     String getIpConfigure(String interfaceName);
+    String getDns(String interfaceName);
 }

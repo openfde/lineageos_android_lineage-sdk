@@ -18,6 +18,7 @@
 * 2.Add forget Wifi interface
 * 3.Add a interface to get static IP configure
 * 4.Add getActivedInterface,getIpConfigure
+* 4.Add getDns
 */
 package lineageos.waydroid;
 
@@ -43,8 +44,7 @@ public class Net {
     private Context mContext;
 
     private Net(Context context) {
-        Context appContext = context.getApplicationContext();
-        mContext = appContext == null ? context : appContext;
+        mContext = context == null ? null : context.getApplicationContext();
         sService = getService();
     }
 
@@ -266,6 +266,19 @@ public class Net {
         }
         try {
             return service.getIpConfigure(interfaceName);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return null;
+    }
+
+	public String getDns(String interfaceName) {
+        INet service = getService();
+        if (service == null) {
+            return null;
+        }
+        try {
+            return service.getDns(interfaceName);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
