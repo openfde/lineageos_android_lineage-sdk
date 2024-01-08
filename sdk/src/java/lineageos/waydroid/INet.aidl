@@ -33,4 +33,7 @@ interface INet {
     String getActivedInterface();
     String getIpConfigure(String interfaceName);
     String getDns(String interfaceName);
+    String getLans();
+    String getLansAndWlans();
+    String getLanAndWlanIpConfigurations();
 }
