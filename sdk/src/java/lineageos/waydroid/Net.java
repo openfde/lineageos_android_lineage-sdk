@@ -324,4 +324,17 @@ public class Net {
         }
         return null;
     }
+
+    public int ipConfiged(String interfaceName) {
+        INet service = getService();
+        if (service == null) {
+            return 0;
+        }
+        try {
+            return service.ipConfiged(interfaceName);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return 0;
+    }
 }

@@ -36,4 +36,5 @@ interface INet {
     String getLans();
     String getLansAndWlans();
     String getLanAndWlanIpConfigurations();
+    int ipConfiged(String interfaceName);
 }
