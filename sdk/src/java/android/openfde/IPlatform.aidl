@@ -15,9 +15,9 @@
 ** limitations under the License.
 */
 
-package lineageos.waydroid;
+package android.openfde;
 
-import lineageos.waydroid.AppInfo;
+import android.openfde.AppInfo;
 
 interface IPlatform {
     String getprop(String prop, String default_value);

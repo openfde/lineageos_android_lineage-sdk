@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package lineageos.waydroid;
+package android.openfde;
 
 import android.content.Context;
 import android.os.IBinder;
@@ -23,6 +23,7 @@ import android.os.ServiceManager;
 import android.util.Log;
 
 import lineageos.app.LineageContextConstants;
+import android.openfde.AppInfo;
 
 import java.util.List;
 import java.util.ArrayList;

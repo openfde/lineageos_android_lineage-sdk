@@ -15,7 +15,7 @@
 ** limitations under the License.
 */
 
-package lineageos.waydroid;
+package android.openfde;
 interface INet {
     int setStaticIp(String interfaceName, String ipAddress, int networkPrefixLength, String gateway, String dns1, String dns2);
     int setDHCP(String interfaceName);

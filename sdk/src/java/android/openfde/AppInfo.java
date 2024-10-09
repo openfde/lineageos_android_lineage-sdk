@@ -1,4 +1,4 @@
-package lineageos.waydroid;
+package android.openfde;
 
 import android.os.Parcel;
 import android.os.Parcelable;

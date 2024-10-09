@@ -21,7 +21,7 @@
 * 5.Add getDns
 * 6.Add getLans,getLansAndWlans,getLanAndWlanIpConfigurations
 */
-package lineageos.waydroid;
+package android.openfde;
 
 import android.content.Context;
 import android.os.IBinder;
@@ -119,11 +119,14 @@ public class Net {
 	
 	public int connectSsid(String ssid, String passwd) {
         INet service = getService();
+		int ret = ERROR_UNDEFINED;
         if (service == null) {
             return ERROR_UNDEFINED;
         }
         try {
-            return service.connectSsid(ssid, passwd);
+            ret = service.connectSsid(ssid, passwd);
+			Log.e(TAG, "ret: " + ret);
+			return ret;
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
@@ -210,11 +213,14 @@ public class Net {
 	
 	public int connectHidedWifi(String ssid, String passwd) {
         INet service = getService();
+		int ret = ERROR_UNDEFINED;
         if (service == null) {
             return ERROR_UNDEFINED;
         }
         try {
-            return service.connectHidedWifi(ssid, passwd);
+            ret = service.connectHidedWifi(ssid, passwd);
+			Log.e(TAG, "ret: " + ret);
+			return ret;
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }

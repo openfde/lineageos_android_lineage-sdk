@@ -42,11 +42,11 @@ import com.android.internal.content.PackageMonitor;
 import com.android.internal.os.BackgroundThread;
 
 import lineageos.app.LineageContextConstants;
-import lineageos.waydroid.AppInfo;
-import lineageos.waydroid.IPlatform;
-import lineageos.waydroid.Platform;
-import lineageos.waydroid.IUserMonitor;
-import lineageos.waydroid.UserMonitor;
+import android.openfde.AppInfo;
+import android.openfde.IPlatform;
+import android.openfde.Platform;
+import android.openfde.IUserMonitor;
+import android.openfde.UserMonitor;
 
 import java.util.ArrayList;
 import java.util.List;
