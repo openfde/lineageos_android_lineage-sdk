@@ -91,7 +91,8 @@ java_library {
         lineage_sdk_internal_src + "/**/*.java",
         library_src + "/**/*.java",
         lineage_sdk_src + "/**/I*.aidl",
-        lineage_sdk_internal_src + "/**/I*.aidl",
+        "sdk/src/java/android/**/*.java",
+        "sdk/src/java/android/**/I*.aidl",
     ],
 
     // Include aidl files from lineageos.app namespace as well as internal src aidl files
@@ -113,6 +114,8 @@ java_library {
         lineage_sdk_internal_src + "/**/*.java",
         lineage_sdk_src + "/**/I*.aidl",
         lineage_sdk_internal_src + "/**/I*.aidl",
+        "sdk/src/java/android/**/*.java",
+        "sdk/src/java/android/**/I*.aidl",
     ],
 
     aidl: {

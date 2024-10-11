@@ -113,21 +113,21 @@ public final class LineageContextConstants {
      *
      * @hide
      */
-    public static final String WAYDROID_PLATFORM_SERVICE = "waydroidplatform";
+    public static final String WAYDROID_PLATFORM_SERVICE = "openfdeplatform";
 
     /**
      * Manages waydroid clipboard
      *
      * @hide
      */
-    public static final String WAYDROID_CLIPBOARD_SERVICE = "waydroidclipboard";
+    public static final String WAYDROID_CLIPBOARD_SERVICE = "openfdeclipboard";
 
     /**
      * Manages waydroid hardware
      *
      * @hide
      */
-    public static final String WAYDROID_HARDWARE_SERVICE = "waydroidhardware";
+    public static final String WAYDROID_HARDWARE_SERVICE = "openfdehardware";
 	/**
      * Manages waydroid net
      *
@@ -140,7 +140,7 @@ public final class LineageContextConstants {
      *
      * @hide
      */
-    public static final String WAYDROID_USERMONITOR_SERVICE = "waydroidusermonitor";
+    public static final String WAYDROID_USERMONITOR_SERVICE = "openfdeusermonitor";
 
     /**
      * Update power menu (GlobalActions)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package lineageos.waydroid;
+package android.openfde;
 
 import android.content.Context;
 import android.os.IBinder;
