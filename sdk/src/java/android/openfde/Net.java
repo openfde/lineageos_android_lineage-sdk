@@ -21,7 +21,7 @@
 * 5.Add getDns
 * 6.Add getLans,getLansAndWlans,getLanAndWlanIpConfigurations
 */
-package lineageos.waydroid;
+package android.openfde;
 
 import android.content.Context;
 import android.os.IBinder;

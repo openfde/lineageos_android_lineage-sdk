@@ -15,9 +15,6 @@
 ** limitations under the License.
 */
 
-package lineageos.waydroid;
+package android.openfde;
 
-interface IUserMonitor {
-    void userUnlocked(int uid);
-    void packageStateChanged(int mode, String packageName, int uid);
-}
+parcelable AppInfo;

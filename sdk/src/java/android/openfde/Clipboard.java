@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package lineageos.waydroid;
+package android.openfde;
 
 import android.content.Context;
 import android.os.IBinder;
@@ -24,77 +24,75 @@ import android.util.Log;
 
 import lineageos.app.LineageContextConstants;
 
-public class UserMonitor {
-    private static final String TAG = "WayDroidUserMonitor";
+public class Clipboard {
+    private static final String TAG = "WayDroidClipboard";
 
-    public static final int WAYDROID_PACKAGE_ADDED = 0;
-    public static final int WAYDROID_PACKAGE_REMOVED = 1;
-    public static final int WAYDROID_PACKAGE_UPDATED = 2;
-
-    private static IUserMonitor sService;
-    private static UserMonitor sInstance;
+    private static IClipboard sService;
+    private static Clipboard sInstance;
 
     private Context mContext;
 
-    private UserMonitor(Context context) {
+    private Clipboard(Context context) {
         Context appContext = context.getApplicationContext();
         mContext = appContext == null ? context : appContext;
         sService = getService();
     }
 
     /**
-     * Get or create an instance of the {@link lineageos.waydroid.UserMonitor}
+     * Get or create an instance of the {@link lineageos.waydroid.Clipboard}
      *
      * @param context Used to get the service
-     * @return {@link UserMonitor}
+     * @return {@link Clipboard}
      */
-    public static UserMonitor getInstance(Context context) {
+    public static Clipboard getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new UserMonitor(context);
+            sInstance = new Clipboard(context);
         }
         return sInstance;
     }
 
     /** @hide **/
-    public static IUserMonitor getService() {
+    public static IClipboard getService() {
         if (sService != null) {
             return sService;
         }
-        IBinder b = ServiceManager.getService(LineageContextConstants.WAYDROID_USERMONITOR_SERVICE);
+        IBinder b = ServiceManager.getService(LineageContextConstants.WAYDROID_CLIPBOARD_SERVICE);
 
         if (b == null) {
             Log.e(TAG, "null service. SAD!");
             return null;
         }
 
-        sService = IUserMonitor.Stub.asInterface(b);
+        sService = IClipboard.Stub.asInterface(b);
         return sService;
     }
 
     /** @hide **/
-    public void userUnlocked(int uid) {
-        IUserMonitor service = getService();
+    public void sendClipboardData(String value) {
+        IClipboard service = getService();
         if (service == null) {
             return;
         }
         try {
-            service.userUnlocked(uid);
+            service.sendClipboardData(value);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return;
     }
 
-    public void packageStateChanged(int mode, String packageName, int uid) {
-        IUserMonitor service = getService();
+    public String getClipboardData() {
+        IClipboard service = getService();
         if (service == null) {
-            return;
+            return "";
         }
         try {
-            service.packageStateChanged(mode, packageName, uid);
+            String paste = service.getClipboardData();
+            return paste != null ? paste : "";
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
-        return;
+        return "";
     }
+
 }
