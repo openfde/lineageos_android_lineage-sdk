@@ -75,6 +75,40 @@ public final class LineageContextConstants {
     public static final String LINEAGE_TRUST_INTERFACE = "lineagetrust";
 
     /**
+     * Manages openfde platform
+     *
+     * @hide
+     */
+    public static final String WAYDROID_PLATFORM_SERVICE = "openfdeplatform";
+
+    /**
+     * Manages openfde clipboard
+     *
+     * @hide
+     */
+    public static final String WAYDROID_CLIPBOARD_SERVICE = "openfdeclipboard";
+
+    /**
+     * Manages openfde hardware
+     *
+     * @hide
+     */
+    public static final String WAYDROID_HARDWARE_SERVICE = "openfdehardware";
+	/**
+     * Manages openfde net
+     *
+     * @hide
+     */
+    public static final String WAYDROID_NET_SERVICE = "openfdenet";
+
+    /**
+     * Monitors openfde user
+     *
+     * @hide
+     */
+    public static final String WAYDROID_USERMONITOR_SERVICE = "openfdeusermonitor";
+
+    /**
      * Use with {@link android.content.Context#getSystemService} to retrieve a
      * {@link lineageos.health.HealthInterface} to access the Health interface.
      *

@@ -99,7 +99,8 @@ java_library {
         lineage_sdk_internal_src + "/**/*.java",
         library_src + "/**/*.java",
         lineage_sdk_src + "/**/I*.aidl",
-        lineage_sdk_internal_src + "/**/I*.aidl",
+        "sdk/src/java/android/**/*.java",
+        "sdk/src/java/android/**/I*.aidl",
 
         // For the generated R.java and Manifest.java
         ":org.lineageos.platform-res{.aapt.srcjar}",
@@ -123,6 +124,8 @@ java_library {
         lineage_sdk_internal_src + "/**/*.java",
         lineage_sdk_src + "/**/I*.aidl",
         lineage_sdk_internal_src + "/**/I*.aidl",
+	    "sdk/src/java/android/**/*.java",
+        "sdk/src/java/android/**/I*.aidl",
 
         // For the generated R.java and Manifest.java
         ":org.lineageos.platform-res{.aapt.srcjar}",
