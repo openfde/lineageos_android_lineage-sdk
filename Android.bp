@@ -182,3 +182,20 @@ java_library {
         "com.android.tethering",
     ],
 }
+
+java_library {
+    name: "org.lineageos.platform.connectivity",
+    min_sdk_version: "30",
+    sdk_version: "system_server_current",
+    platform_apis: true,
+
+    srcs: [
+        "sdk/src/java/android/openfde/Net.java",
+        "sdk/src/java/android/openfde/INet.aidl",
+    ],
+
+    // List of apex modules that can link against this lib
+    apex_available: [
+        "com.android.tethering",
+    ],
+}

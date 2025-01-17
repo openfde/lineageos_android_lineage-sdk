@@ -94,12 +94,6 @@ public final class LineageContextConstants {
      * @hide
      */
     public static final String WAYDROID_HARDWARE_SERVICE = "openfdehardware";
-	/**
-     * Manages openfde net
-     *
-     * @hide
-     */
-    public static final String WAYDROID_NET_SERVICE = "openfdenet";
 
     /**
      * Monitors openfde user

@@ -29,10 +29,9 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
-import lineageos.app.LineageContextConstants;
-
 public class Net {
     private static final String TAG = "fdenet";
+    public static final String WAYDROID_NET_SERVICE = "openfdenet";
 
     /**
      * Unable to determine status, an error occured
@@ -67,7 +66,7 @@ public class Net {
         if (sService != null) {
             return sService;
         }
-        IBinder b = ServiceManager.getService(LineageContextConstants.WAYDROID_NET_SERVICE);
+        IBinder b = ServiceManager.getService(WAYDROID_NET_SERVICE);
 
         if (b == null) {
             Log.e(TAG, "null service. SAD!");
