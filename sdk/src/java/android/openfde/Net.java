@@ -336,4 +336,30 @@ public class Net {
         }
         return 0;
     }
+
+    public String getLansWlansBridges() {
+         INet service = getService();
+         if (service == null) {
+             return null;
+         }
+         try {
+             return service.getLansWlansBridges();
+         } catch (RemoteException e) {
+             Log.e(TAG, e.getLocalizedMessage(), e);
+         }
+         return null;
+     }
+
+     public String getLanWlanBridgeIpConfigurations() {
+         INet service = getService();
+         if (service == null) {
+             return null;
+         }
+         try {
+             return service.getLanWlanBridgeIpConfigurations();
+         } catch (RemoteException e) {
+             Log.e(TAG, e.getLocalizedMessage(), e);
+         }
+         return null;
+     }
 }
