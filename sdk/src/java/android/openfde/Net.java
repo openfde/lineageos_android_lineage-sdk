@@ -362,4 +362,17 @@ public class Net {
          }
          return null;
      }
+
+     public String getAllSsidInfo() {
+         INet service = getService();
+         if (service == null) {
+             return null;
+         }
+         try {
+             return service.getAllSsidInfo();
+         } catch (RemoteException e) {
+             Log.e(TAG, e.getLocalizedMessage(), e);
+         }
+         return null;
+     }
 }

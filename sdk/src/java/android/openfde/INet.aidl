@@ -39,4 +39,5 @@ interface INet {
     int ipConfiged(String interfaceName);
     String getLansWlansBridges();
     String getLanWlanBridgeIpConfigurations();
+    String getAllSsidInfo();
 }
