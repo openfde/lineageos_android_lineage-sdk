@@ -101,16 +101,19 @@ public class WayDroidService extends LineageSystemService {
 
     @Override
     public void onUnlockUser(int userHandle) {
-        /*List<ApplicationInfo> apps = mPm.getInstalledApplications(0);
-        for (int n = 0; n < apps.size(); n++) {
-            ApplicationInfo appInfo = apps.get(n);
+        String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
+	if (prop != "false"){
+		List<ApplicationInfo> apps = mPm.getInstalledApplications(0);
+		for (int n = 0; n < apps.size(); n++) {
+		    ApplicationInfo appInfo = apps.get(n);
 
-            Intent launchIntent = mPm.getLaunchIntentForPackage(appInfo.packageName);
-            if (launchIntent == null) {
-                continue;
-            }
-            saveApplicationIcon(appInfo.packageName);
-        }*/
+		    Intent launchIntent = mPm.getLaunchIntentForPackage(appInfo.packageName);
+		    if (launchIntent == null) {
+			continue;
+		    }
+		    saveApplicationIcon(appInfo.packageName);
+		}
+	}
         if (mUM != null) {
             mUM.userUnlocked(userHandle);
         }
@@ -170,10 +173,10 @@ public class WayDroidService extends LineageSystemService {
         PackageMonitor monitor = new PackageMonitor() {
             @Override
             public void onPackageAdded(String packageName, int uid) {
-                if(true){
-                    Log.e(TAG, "onPackageAdded " + packageName);
+		String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
+		if (prop == "false"){
                     return;
-                }
+		}
                 if (mUM != null) {
                     mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName, uid);
                 }
