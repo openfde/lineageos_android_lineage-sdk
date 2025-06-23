@@ -173,10 +173,11 @@ public class WayDroidService extends LineageSystemService {
         PackageMonitor monitor = new PackageMonitor() {
             @Override
             public void onPackageAdded(String packageName, int uid) {
-		String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
-		if (prop == "false"){
+                Log.w(TAG, "onPackageAdded " + packageName + ",uid "+uid);
+                String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
+                if ("false".equals(prop)){
                     return;
-		}
+                }
                 if (mUM != null) {
                     mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName, uid);
                 }
@@ -185,8 +186,9 @@ public class WayDroidService extends LineageSystemService {
 
             @Override
             public void onPackageRemoved(String packageName, int uid) {
-                if(true){
-                    Log.e(TAG, "onPackageRemoved " + packageName);
+                Log.w(TAG, "onPackageRemoved " + packageName + ",uid "+uid);
+                String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
+                if ("false".equals(prop)){
                     return;
                 }
                 if (mUM != null) {
@@ -199,6 +201,7 @@ public class WayDroidService extends LineageSystemService {
 
             @Override
             public void onPackageUpdateFinished(String packageName, int uid) {
+                Log.w(TAG, "onPackageUpdateFinished " + packageName + ",uid "+uid);
                 if(true){
                     Log.e(TAG, "onPackageUpdateFinished " + packageName);
                     return;
@@ -368,6 +371,7 @@ public class WayDroidService extends LineageSystemService {
 
         @Override
         public void launchApp(String packageName) {
+            Log.w(TAG, "launchApp " + packageName);
             if (mPm == null || mContext == null)
                 return;
 
@@ -387,7 +391,33 @@ public class WayDroidService extends LineageSystemService {
         }
 
         @Override
+        public void startApp(String packageName,int uid) {
+            Log.w(TAG, "startApp packageName: " + packageName + ",uid "+uid);
+
+            String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
+            if ("false".equals(prop)){
+                return;
+            }
+            if (mUM != null) {
+                mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_START, packageName, uid);
+            }
+        }
+
+        @Override
+        public void finishApp(String packageName,int uid) {
+            Log.w(TAG, "finishApp packageName: " + packageName + ",uid "+uid);
+            String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
+            if ("false".equals(prop)){
+                return;
+            }
+            if (mUM != null) {
+                mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_FINISH, packageName, uid);
+            }
+        }
+
+        @Override
         public String launchIntent(String action, String uri) {
+            Log.w(TAG, "launchIntent action: " + action + ",uri "+uri);
             if (mPm == null || mContext == null)
                 return "";
 
