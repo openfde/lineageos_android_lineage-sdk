@@ -99,4 +99,18 @@ public class UserMonitor {
         }
         return;
     }
+
+
+    public void packageStateChangedHasVernsion(int mode, String packageName,String version, int uid) {
+        IUserMonitor service = getService();
+        if (service == null) {
+            return;
+        }
+        try {
+            service.packageStateChangedHasVernsion(mode, packageName,version, uid);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
 }
