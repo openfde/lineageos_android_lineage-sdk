@@ -58,6 +58,7 @@ import java.io.FileOutputStream;
 
 import libcore.io.IoUtils;
 import android.content.pm.PackageInfo;
+import android.app.ActivityManager;
 
 /** @hide **/
 public class WayDroidService extends LineageSystemService {
@@ -391,7 +392,6 @@ public class WayDroidService extends LineageSystemService {
             Log.w(TAG, "launchApp " + packageName);
             if (mPm == null || mContext == null)
                 return;
-
             ApplicationInfo appInfo;
             try {
                 appInfo = mPm.getApplicationInfo(packageName, 0);
@@ -403,8 +403,16 @@ public class WayDroidService extends LineageSystemService {
             if (launchIntent == null) {
                 return;
             }
-
             mContext.startActivity(launchIntent);
+        }
+
+        @Override
+        public void stopApp(String packageName) {
+            Log.w(TAG, "stopApp " + packageName);
+            if (mContext == null)
+                return;
+            ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+            am.forceStopPackage(packageName); 
         }
 
         @Override

@@ -173,6 +173,20 @@ public class Platform {
         return;
     }
 
+    public void stopApp(String packageName) {
+        Log.w(TAG, "WayDroidService1 stopApp packageName: "+packageName);
+        if (sService == null) {
+            return;
+        }
+        try {
+            Log.w(TAG, "WayDroidService2 stopApp packageName: "+packageName);
+            sService.stopApp(packageName);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
+
     public void startApp(String packageName,int uid) {
         if (sService == null) {
             return;

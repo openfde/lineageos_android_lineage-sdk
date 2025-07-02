@@ -1222,6 +1222,7 @@ package lineageos.waydroid {
     method public int installApp(String);
     method public int removeApp(String);
     method public void launchApp(String);
+    method public void stopApp(String);
     method public String getAppName(String);
     method public void settingsPutString(int, String, String);
     method public String settingsGetString(int, String);

@@ -28,8 +28,7 @@ interface IPlatform {
     int installApp(String path);
     int removeApp(String packageName);
     void launchApp(String packageName);
-    void startApp(String packageName,int uid);
-    void finishApp(String packageName,int uid);
+
     String getAppName(String packageName);
 
     void settingsPutString(int mode, String key, String value);
@@ -37,4 +36,8 @@ interface IPlatform {
     void settingsPutInt(int mode, String key, int value);
     int settingsGetInt(int mode, String key);
     String launchIntent(String action, String uri);
+    void startApp(String packageName,int uid);
+    void finishApp(String packageName,int uid);
+    void stopApp(String packageName);
+
 }
