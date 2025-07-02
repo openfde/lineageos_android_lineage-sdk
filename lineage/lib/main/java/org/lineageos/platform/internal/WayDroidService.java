@@ -57,6 +57,7 @@ import java.io.OutputStream;
 import java.io.FileOutputStream;
 
 import libcore.io.IoUtils;
+import android.content.pm.PackageInfo;
 
 /** @hide **/
 public class WayDroidService extends LineageSystemService {
@@ -174,12 +175,25 @@ public class WayDroidService extends LineageSystemService {
             @Override
             public void onPackageAdded(String packageName, int uid) {
                 Log.w(TAG, "onPackageAdded " + packageName + ",uid "+uid);
+                String versionName = "0.0";
+                
+                try {
+                    PackageInfo packageInfo = mContext.getPackageManager().getPackageInfo(packageName, 0);
+                    versionName = packageInfo.versionName; 
+                    int versionCode = packageInfo.versionCode; 
+                    Log.w(TAG, "onPackageAdded versionName " + versionName + ",versionCode "+versionCode);
+                } catch (Exception e) {
+                    Log.e(TAG, "onPackageAdded " + e.toString());
+                    e.printStackTrace();
+                }
+
                 String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
                 if ("false".equals(prop)){
                     return;
                 }
                 if (mUM != null) {
-                    mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName, uid);
+                    mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName,versionName, uid);
+                   // mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName, uid);
                 }
                 saveApplicationIcon(packageName);
             }
@@ -268,6 +282,7 @@ public class WayDroidService extends LineageSystemService {
 
         @Override
         public AppInfo getAppInfo(String packageName) {
+            Log.w(TAG, "getAppInfo " + packageName);
             if (mPm == null)
                 return null;
 
@@ -304,6 +319,7 @@ public class WayDroidService extends LineageSystemService {
 
         @Override
         public int installApp(String path) {
+            Log.w(TAG, "installApp " + path);
             int ret = 0;
             final Uri packageURI;
 
@@ -354,6 +370,7 @@ public class WayDroidService extends LineageSystemService {
 
         @Override
         public int removeApp(String packageName) {
+          Log.w(TAG, "removeApp " + packageName);
           final PackageInstaller packageInstaller = mPm.getPackageInstaller();
 
           mPm.setInstallerPackageName(packageName, mContext.getPackageName());
