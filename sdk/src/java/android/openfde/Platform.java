@@ -173,6 +173,30 @@ public class Platform {
         return;
     }
 
+    public void startApp(String packageName,int uid) {
+        if (sService == null) {
+            return;
+        }
+        try {
+            sService.startApp(packageName,uid);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
+
+    public void finishApp(String packageName,int uid) {
+        if (sService == null) {
+            return;
+        }
+        try {
+            sService.finishApp(packageName,uid);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
+
     public String getAppName(String packageName) {
         if (sService == null) {
             return "";

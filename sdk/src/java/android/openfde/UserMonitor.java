@@ -30,6 +30,8 @@ public class UserMonitor {
     public static final int WAYDROID_PACKAGE_ADDED = 0;
     public static final int WAYDROID_PACKAGE_REMOVED = 1;
     public static final int WAYDROID_PACKAGE_UPDATED = 2;
+    public static final int WAYDROID_PACKAGE_START = 3;
+    public static final int WAYDROID_PACKAGE_FINISH = 4;
 
     private static IUserMonitor sService;
     private static UserMonitor sInstance;
