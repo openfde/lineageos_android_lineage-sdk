@@ -39,5 +39,7 @@ interface IPlatform {
     void startApp(String packageName,int uid);
     void finishApp(String packageName,int uid);
     void stopApp(String packageName);
+    String compatbileGet(String packageName,String keyCode);
+    void compatbileSet(String packageName,String keyCode,String value);
 
 }

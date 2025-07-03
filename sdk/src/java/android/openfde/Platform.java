@@ -187,6 +187,34 @@ public class Platform {
         return;
     }
 
+    public String compatbileGet(String packageName,String keyCode) {
+        Log.w(TAG, "WayDroidService1 compatbileGet packageName: "+packageName);
+        if (sService == null) {
+            return null;
+        }
+        try {
+            Log.w(TAG, "WayDroidService2 compatbileGet packageName: "+packageName);
+            return sService.compatbileGet(packageName,keyCode);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return null;
+    }
+
+    public void compatbileSet(String packageName,String keyCode,String value) {
+        Log.w(TAG, "WayDroidService1 compatbileSet packageName: "+packageName);
+        if (sService == null) {
+            return;
+        }
+        try {
+            Log.w(TAG, "WayDroidService2 compatbileSet packageName: "+packageName);
+            sService.compatbileSet(packageName,keyCode,value);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
+
     public void startApp(String packageName,int uid) {
         if (sService == null) {
             return;

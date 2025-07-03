@@ -59,6 +59,7 @@ import java.io.FileOutputStream;
 import libcore.io.IoUtils;
 import android.content.pm.PackageInfo;
 import android.app.ActivityManager;
+import com.android.internal.util.CompatibleConfig;
 
 /** @hide **/
 public class WayDroidService extends LineageSystemService {
@@ -419,8 +420,26 @@ public class WayDroidService extends LineageSystemService {
                 return;
             }
             if (mUM != null) {
-                mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_FINISH, packageName, uid);
+                mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_FINISH, packageName, 0);
             }
+        }
+
+        @Override
+        public String compatbileGet(String packageName,String keyCode) {
+            Log.w(TAG, "compatbileGet " + packageName + ",keyCode "+keyCode);
+            if (mContext == null)
+                return null;
+            String res = CompatibleConfig.queryValueDataBySharedMemory(mContext,packageName,keyCode);
+            Log.w(TAG,"getCompatibleConfig res: "+res);
+            return res;   
+        }
+
+        @Override
+        public void  compatbileSet(String packageName,String keyCode,String value) {
+            Log.w(TAG, "compatbileSet " + packageName+ ",keyCode "+keyCode + ",value "+value);
+            if (mContext == null)
+                return;
+            CompatibleConfig.insertUpdateValueData(mContext,packageName,keyCode,value);
         }
 
         @Override
