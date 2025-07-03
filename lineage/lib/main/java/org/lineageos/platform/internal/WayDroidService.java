@@ -413,6 +413,14 @@ public class WayDroidService extends LineageSystemService {
                 return;
             ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
             am.forceStopPackage(packageName); 
+            
+            String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
+            if ("false".equals(prop)){
+                return;
+            }
+            if (mUM != null) {
+                mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_FINISH, packageName, uid);
+            }
         }
 
         @Override
