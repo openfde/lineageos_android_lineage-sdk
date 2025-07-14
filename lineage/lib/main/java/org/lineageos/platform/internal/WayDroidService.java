@@ -31,6 +31,7 @@ import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.ProgressBar;
 import android.net.Uri;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.BitmapDrawable;
@@ -60,6 +61,8 @@ import libcore.io.IoUtils;
 import android.content.pm.PackageInfo;
 import android.app.ActivityManager;
 import com.android.internal.util.CompatibleConfig;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
 
 /** @hide **/
 public class WayDroidService extends LineageSystemService {
@@ -73,6 +76,7 @@ public class WayDroidService extends LineageSystemService {
     private Context mContext;
     private PackageManager mPm = null;
     private UserMonitor mUM = null;
+    // PackageInstaller.SessionCallback mSessionCallback;
 
     public WayDroidService(Context context) {
         super(context);
@@ -94,6 +98,8 @@ public class WayDroidService extends LineageSystemService {
         publishBinderService(LineageContextConstants.WAYDROID_PLATFORM_SERVICE, mPlatformService);
         if (mContext != null) {
             mUM = UserMonitor.getInstance(mContext);
+            PackageInstaller packageInstaller = mContext.getPackageManager().getPackageInstaller();
+            packageInstaller.registerSessionCallback(new InstallSessionCallback());
         } else {
             Log.w(TAG, "No context available");
         }
@@ -195,7 +201,6 @@ public class WayDroidService extends LineageSystemService {
                 }
                 if (mUM != null) {
                     mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName,versionName, uid);
-                   // mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName, uid);
                 }
                 saveApplicationIcon(packageName);
             }
@@ -335,6 +340,8 @@ public class WayDroidService extends LineageSystemService {
             final PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(
                     PackageInstaller.SessionParams.MODE_FULL_INSTALL);
             final PackageInstaller packageInstaller = mPm.getPackageInstaller();
+         
+
             PackageInstaller.Session session = null;
             try {
                 final int sessionId = packageInstaller.createSession(params);
@@ -360,6 +367,7 @@ public class WayDroidService extends LineageSystemService {
                         broadcastIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
                 session.commit(pendingIntent.getIntentSender());
+                Log.w(TAG, "installApp  commit" );
             } catch (IOException e) {
                 Log.e(TAG, "Failure", e);
                 ret = -1;
@@ -452,6 +460,14 @@ public class WayDroidService extends LineageSystemService {
             }
             if (mUM != null) {
                 mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_START, packageName, uid);
+            }
+        }
+
+        @Override
+        public void installAppCallBack(String packageName,int code,String msg) {
+            Log.w(TAG, "installAppCallBack packageName: " + packageName + ",code "+code + ",msg "+msg);
+            if (mUM != null) {
+                mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName,code+"###"+msg, 0);
             }
         }
 
@@ -561,4 +577,33 @@ public class WayDroidService extends LineageSystemService {
             return Platform.ERROR_UNDEFINED;
         }
     };
+     private class InstallSessionCallback extends PackageInstaller.SessionCallback {
+        @Override
+        public void onCreated(int sessionId) {
+            // empty
+             Log.w(TAG, "onCreated: sessionId " + sessionId );
+        }
+
+        @Override
+        public void onBadgingChanged(int sessionId) {
+            // empty
+             Log.w(TAG, "onBadgingChanged: sessionId " + sessionId );
+        }
+
+        @Override
+        public void onActiveChanged(int sessionId, boolean active) {
+            // empty
+             Log.w(TAG, "onActiveChanged: sessionId " + sessionId );
+        }
+
+        @Override
+        public void onProgressChanged(int sessionId, float progress) {
+            Log.w(TAG, "onProgressChanged: sessionId " + sessionId + ",progress "+progress);
+        }
+
+        @Override
+        public void onFinished(int sessionId, boolean success) {
+            Log.w(TAG, "onFinished: sessionId " + sessionId + ",success "+success);
+        }
+    }
 }

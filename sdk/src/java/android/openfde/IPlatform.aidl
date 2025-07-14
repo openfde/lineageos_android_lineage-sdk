@@ -41,5 +41,5 @@ interface IPlatform {
     void stopApp(String packageName);
     String compatbileGet(String packageName,String keyCode);
     void compatbileSet(String packageName,String keyCode,String value);
-
+    void installAppCallBack(String packageName,int code,String msg);
 }

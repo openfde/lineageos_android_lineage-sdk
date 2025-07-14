@@ -227,6 +227,18 @@ public class Platform {
         return;
     }
 
+    public void installAppCallBack(String packageName,int code,String msg) {
+        if (sService == null) {
+            return;
+        }
+        try {
+            sService.installAppCallBack(packageName,code,msg);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
+
     public void finishApp(String packageName,int uid) {
         if (sService == null) {
             return;
