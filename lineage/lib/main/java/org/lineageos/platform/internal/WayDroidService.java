@@ -38,6 +38,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
+import android.view.inputmethod.InputMethodManager;
 
 import com.android.internal.content.PackageMonitor;
 import com.android.internal.os.BackgroundThread;
@@ -575,6 +576,17 @@ public class WayDroidService extends LineageSystemService {
                 Log.e(TAG, e.getMessage());
             }
             return Platform.ERROR_UNDEFINED;
+        }
+        @Override
+        public void commitText(String text) {
+            Log.d(TAG, "commitText: " + text);
+            InputMethodManager.getInstance().commitText(text);
+        }
+
+        @Override
+        public void sendKeyEvent(int action, int code) {
+            Log.d(TAG, "sendKeyEvent action: " + action + ", code: " + code);
+            InputMethodManager.getInstance().sendKeyEvent(action, code);
         }
     };
      private class InstallSessionCallback extends PackageInstaller.SessionCallback {

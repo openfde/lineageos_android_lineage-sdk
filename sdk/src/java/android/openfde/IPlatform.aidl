@@ -42,4 +42,6 @@ interface IPlatform {
     String compatbileGet(String packageName,String keyCode);
     void compatbileSet(String packageName,String keyCode,String value);
     void installAppCallBack(String packageName,int code,String msg);
+    void commitText(String text);
+    void sendKeyEvent(int action, int code);
 }
