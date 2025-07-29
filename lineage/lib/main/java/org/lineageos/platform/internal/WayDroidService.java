@@ -52,6 +52,7 @@ import android.openfde.UserMonitor;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,6 +65,11 @@ import android.app.ActivityManager;
 import com.android.internal.util.CompatibleConfig;
 import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
+import android.app.ActivityOptions;
+import android.graphics.Rect;
+import android.content.SharedPreferences;
+import android.content.ComponentName;
+
 
 /** @hide **/
 public class WayDroidService extends LineageSystemService {
@@ -73,6 +79,9 @@ public class WayDroidService extends LineageSystemService {
     private static final String BROADCAST_ACTION_UNINSTALL =
             "org.lineageos.platform.waydroid.ACTION_UNINSTALL_COMMIT";
     private static final String ICONS_DIR = "/data/icons";
+
+    private static final String LAUNCHER_PKG = "com.fde.fde_linux_app_launcher";
+    private static final String LAUNCHER_ACTIVITY = "com.fde.fde_linux_app_launcher.MainActivity";
 
     private Context mContext;
     private PackageManager mPm = null;
@@ -402,18 +411,31 @@ public class WayDroidService extends LineageSystemService {
             Log.w(TAG, "launchApp " + packageName);
             if (mPm == null || mContext == null)
                 return;
-            ApplicationInfo appInfo;
-            try {
-                appInfo = mPm.getApplicationInfo(packageName, 0);
-            } catch (NameNotFoundException e) {
-                Log.e(TAG, e.getMessage());
-                return;
-            }
-            Intent launchIntent = mPm.getLaunchIntentForPackage(appInfo.packageName);
-            if (launchIntent == null) {
-                return;
-            }
-            mContext.startActivity(launchIntent);
+            // ApplicationInfo appInfo;
+            // try {
+            //     appInfo = mPm.getApplicationInfo(packageName, 0);
+            // } catch (NameNotFoundException e) {
+            //     Log.e(TAG, e.getMessage());
+            //     return;
+            // }
+            // Intent launchIntent = mPm.getLaunchIntentForPackage(appInfo.packageName);
+            // if (launchIntent == null) {
+            //     return;
+            // }
+            // mContext.startActivity(launchIntent);
+            // ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+            // am.forceStopPackage(packageName); 
+            // Intent launchIntent = mContext.getPackageManager().getLaunchIntentForPackage(packageName);
+            // mContext.startActivity(launchIntent);
+
+            Intent intent = new Intent();
+            ComponentName componentName = new ComponentName(LAUNCHER_PKG, LAUNCHER_ACTIVITY);
+            intent.setComponent(componentName);
+            intent.putExtra("openParams", "waydroid###"+packageName);
+            intent.putExtra("fromOther", "Launcher");
+            intent.putExtra("vnc_activity_name", "");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
         }
 
         @Override
