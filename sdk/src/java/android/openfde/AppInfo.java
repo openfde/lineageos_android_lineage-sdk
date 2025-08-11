@@ -13,6 +13,7 @@ public final class AppInfo implements Parcelable {
     public String componentPackageName;
     public String componentClassName;
     public List<String> categories;
+    public String version;
 
     public static final Parcelable.Creator<AppInfo> CREATOR = new Parcelable.Creator<AppInfo>() {
         public AppInfo createFromParcel(Parcel in) {
@@ -34,16 +35,19 @@ public final class AppInfo implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(name);
         out.writeString(packageName);
+        out.writeString(version);
         out.writeString(action);
         out.writeString(launchIntent);
         out.writeString(componentPackageName);
         out.writeString(componentClassName);
         out.writeStringList(categories);
+        
     }
 
     public void readFromParcel(Parcel in) {
         name = in.readString();
         packageName = in.readString();
+        version = in.readString();
         action = in.readString();
         launchIntent = in.readString();
         componentPackageName = in.readString();

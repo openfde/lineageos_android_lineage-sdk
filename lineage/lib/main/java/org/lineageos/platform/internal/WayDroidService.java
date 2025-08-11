@@ -233,14 +233,19 @@ public class WayDroidService extends LineageSystemService {
             @Override
             public void onPackageUpdateFinished(String packageName, int uid) {
                 Log.w(TAG, "onPackageUpdateFinished " + packageName + ",uid "+uid);
-                if(true){
-                    Log.e(TAG, "onPackageUpdateFinished " + packageName);
-                    return;
+                 try {
+                    PackageInfo packageInfo = mContext.getPackageManager().getPackageInfo(packageName, 0);
+                    String versionName = packageInfo.versionName; 
+                    int versionCode = packageInfo.versionCode; 
+                    Log.w(TAG, "onPackageUpdateFinished versionName " + versionName + ",versionCode "+versionCode);
+                    if (mUM != null) {
+                        mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_UPDATED, packageName,versionName, uid);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "onPackageUpdateFinished " + e.toString());
+                    e.printStackTrace();
                 }
-                if (mUM != null) {
-                    mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_UPDATED, packageName, uid);
-                }
-                saveApplicationIcon(packageName);
+                // saveApplicationIcon(packageName);
             }
         };
 
@@ -292,6 +297,15 @@ public class WayDroidService extends LineageSystemService {
                 info.componentClassName = launchIntent.getComponent().getClassName();
                 info.componentPackageName = launchIntent.getComponent().getPackageName();
                 info.categories = new ArrayList<String>(launchIntent.getCategories());
+                try {
+                    PackageInfo packageInfo = mContext.getPackageManager().getPackageInfo(appInfo.packageName, 0);
+                    String versionName = packageInfo.versionName; 
+                    info.version = versionName;
+                } catch (Exception e) {
+                    Log.e(TAG, "getAppsInfo " + e.toString());
+                    e.printStackTrace();
+                    info.version = "unkown";
+                }
                 result.add(info);
             }
             return result;
@@ -408,9 +422,9 @@ public class WayDroidService extends LineageSystemService {
 
         @Override
         public void launchApp(String packageName) {
-            Log.w(TAG, "launchApp " + packageName);
-            if (mPm == null || mContext == null)
-                return;
+            Log.w(TAG, "launchApp:111  " + packageName);
+            // if (mPm == null || mContext == null)
+            //     return;
             // ApplicationInfo appInfo;
             // try {
             //     appInfo = mPm.getApplicationInfo(packageName, 0);
@@ -422,6 +436,7 @@ public class WayDroidService extends LineageSystemService {
             // if (launchIntent == null) {
             //     return;
             // }
+            // Log.w(TAG, "launchApp:222  " + packageName);
             // mContext.startActivity(launchIntent);
             // ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
             // am.forceStopPackage(packageName); 
