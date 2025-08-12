@@ -25,7 +25,7 @@ interface IPlatform {
 
     List<AppInfo> getAppsInfo();
     AppInfo getAppInfo(String packageName);
-    int installApp(String path);
+    int installApp(String path,String fileName);
     int removeApp(String packageName);
     void launchApp(String packageName);
 

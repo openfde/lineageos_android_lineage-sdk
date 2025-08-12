@@ -51,8 +51,9 @@ import android.openfde.IUserMonitor;
 import android.openfde.UserMonitor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,6 +88,7 @@ public class WayDroidService extends LineageSystemService {
     private PackageManager mPm = null;
     private UserMonitor mUM = null;
     // PackageInstaller.SessionCallback mSessionCallback;
+    private Map<String,Object> installMap ;
 
     public WayDroidService(Context context) {
         super(context);
@@ -349,8 +351,8 @@ public class WayDroidService extends LineageSystemService {
         }
 
         @Override
-        public int installApp(String path) {
-            Log.w(TAG, "installApp " + path);
+        public int installApp(String path,String fileName) {
+            Log.w(TAG, "installApp " + path +",fileName: "+fileName);
             int ret = 0;
             final Uri packageURI;
 
@@ -391,7 +393,10 @@ public class WayDroidService extends LineageSystemService {
                         broadcastIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
                 session.commit(pendingIntent.getIntentSender());
-                Log.w(TAG, "installApp  commit" );
+                Log.w(TAG, "installApp  commit sessionId:  "+sessionId );
+                installMap = new HashMap<>();
+                installMap.put("sessionId", sessionId);
+                installMap.put("fileName", fileName);
             } catch (IOException e) {
                 Log.e(TAG, "Failure", e);
                 ret = -1;
@@ -653,6 +658,20 @@ public class WayDroidService extends LineageSystemService {
         @Override
         public void onFinished(int sessionId, boolean success) {
             Log.w(TAG, "onFinished: sessionId " + sessionId + ",success "+success);
+            if(installMap !=null){
+                try {
+                    int sessId = Integer.valueOf(installMap.get("sessionId").toString()) ;
+                    String fileName  = installMap.get("fileName").toString();
+                    if(!success && sessionId == sessId){
+                        if (mUM != null) {
+                            mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_ADDED, "unkown",sessId+"###"+fileName, 0);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
     }
 }

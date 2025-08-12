@@ -137,12 +137,12 @@ public class Platform {
         return null;
     }
 
-    public int installApp(String path) {
+    public int installApp(String path,String fileName) {
         if (sService == null) {
             return ERROR_UNDEFINED;
         }
         try {
-            return sService.installApp(path);
+            return sService.installApp(path,fileName);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }

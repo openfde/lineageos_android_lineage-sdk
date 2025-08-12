@@ -1219,7 +1219,7 @@ package lineageos.waydroid {
     method public void setprop(String, String);
     method public java.util.List<lineageos.waydroid.AppInfo> getAppsInfo();
     method public lineageos.waydroid.AppInfo getAppInfo(String);
-    method public int installApp(String);
+    method public int installApp(String,String);
     method public int removeApp(String);
     method public void launchApp(String);
     method public void stopApp(String);
