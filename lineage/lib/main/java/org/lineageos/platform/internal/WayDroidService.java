@@ -664,7 +664,7 @@ public class WayDroidService extends LineageSystemService {
                     String fileName  = installMap.get("fileName").toString();
                     if(!success && sessionId == sessId){
                         if (mUM != null) {
-                            mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_ADDED, "unkown",sessId+"###"+fileName, 0);
+                            mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_ADDED, fileName,sessId+"###"+"unkown", 0);
                         }
                     }
                 } catch (Exception e) {
