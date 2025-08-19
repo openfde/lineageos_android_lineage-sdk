@@ -70,7 +70,7 @@ import android.app.ActivityOptions;
 import android.graphics.Rect;
 import android.content.SharedPreferences;
 import android.content.ComponentName;
-
+import android.text.TextUtils;
 
 /** @hide **/
 public class WayDroidService extends LineageSystemService {
@@ -445,17 +445,21 @@ public class WayDroidService extends LineageSystemService {
             // mContext.startActivity(launchIntent);
             // ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
             // am.forceStopPackage(packageName); 
-            // Intent launchIntent = mContext.getPackageManager().getLaunchIntentForPackage(packageName);
-            // mContext.startActivity(launchIntent);
 
-            Intent intent = new Intent();
-            ComponentName componentName = new ComponentName(LAUNCHER_PKG, LAUNCHER_ACTIVITY);
-            intent.setComponent(componentName);
-            intent.putExtra("openParams", "waydroid###"+packageName);
-            intent.putExtra("fromOther", "Launcher");
-            intent.putExtra("vnc_activity_name", "");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mContext.startActivity(intent);
+            String res = CompatibleConfig.queryValueDataBySharedMemory(mContext,packageName,"activityLunchSize");
+            if(TextUtils.isEmpty(res)){
+                 Intent launchIntent = mContext.getPackageManager().getLaunchIntentForPackage(packageName);
+                 mContext.startActivity(launchIntent);
+            }else{
+                Intent intent = new Intent();
+                ComponentName componentName = new ComponentName(LAUNCHER_PKG, LAUNCHER_ACTIVITY);
+                intent.setComponent(componentName);
+                intent.putExtra("openParams", "waydroid###"+packageName);
+                intent.putExtra("fromOther", "Launcher");
+                intent.putExtra("vnc_activity_name", "");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
+            }
         }
 
         @Override
