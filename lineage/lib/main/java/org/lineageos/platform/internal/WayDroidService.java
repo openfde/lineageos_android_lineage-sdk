@@ -369,8 +369,9 @@ public class WayDroidService extends LineageSystemService {
          
 
             PackageInstaller.Session session = null;
+            int sessionId = 0;
             try {
-                final int sessionId = packageInstaller.createSession(params);
+                sessionId = packageInstaller.createSession(params);
                 final byte[] buffer = new byte[65536];
                 session = packageInstaller.openSession(sessionId);
                 final InputStream in = mContext.getContentResolver().openInputStream(packageURI);
@@ -398,7 +399,11 @@ public class WayDroidService extends LineageSystemService {
                 installMap.put("sessionId", sessionId);
                 installMap.put("fileName", fileName);
             } catch (IOException e) {
-                Log.e(TAG, "Failure", e);
+                e.printStackTrace();
+                Log.e(TAG, "Failure: "+ e.toString());
+                if (mUM != null) {
+                     mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_ADDED, fileName,sessionId+"###"+e.toString(), 0);
+                }
                 ret = -1;
             } finally {
                 IoUtils.closeQuietly(session);
