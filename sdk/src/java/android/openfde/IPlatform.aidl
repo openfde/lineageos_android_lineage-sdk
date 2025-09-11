@@ -22,15 +22,12 @@ import android.openfde.AppInfo;
 interface IPlatform {
     String getprop(String prop, String default_value);
     void setprop(String prop, String value);
-
     List<AppInfo> getAppsInfo();
     AppInfo getAppInfo(String packageName);
     int installApp(String path,String fileName);
     int removeApp(String packageName);
     void launchApp(String packageName);
-
     String getAppName(String packageName);
-
     void settingsPutString(int mode, String key, String value);
     String settingsGetString(int mode, String key);
     void settingsPutInt(int mode, String key, int value);

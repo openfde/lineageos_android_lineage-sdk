@@ -338,6 +338,7 @@ public class WayDroidService extends LineageSystemService {
             AppInfo info = new AppInfo();
             info.name = name;
             info.packageName = appInfo.packageName;
+            info.version = "1.0.0";
             info.action = launchIntent.getAction();
             if (launchIntent.getData() != null)
                 info.launchIntent = launchIntent.getData().toString();
