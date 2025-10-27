@@ -232,4 +232,32 @@ public class Platform {
         }
         return ERROR_UNDEFINED;
     }
+
+    public void commitText(String text) {
+        if (sService == null) {
+            Log.e(TAG, "error sService is null.");
+            return;
+        }
+        try {
+            Log.d(TAG, "sService.commitText: " + text);
+            sService.commitText(text);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
+
+    public void sendKeyEvent(int action, int code) {
+        if (sService == null) {
+            Log.e(TAG, "error sService is null.");
+            return;
+        }
+        try {
+            Log.d(TAG, "sendKeyEvent action: " + action + ", code: " + code);
+            sService.sendKeyEvent(action, code);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
 }

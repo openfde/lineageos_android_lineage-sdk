@@ -35,4 +35,6 @@ interface IPlatform {
     void settingsPutInt(int mode, String key, int value);
     int settingsGetInt(int mode, String key);
     String launchIntent(String action, String uri);
+    void commitText(String text);
+    void sendKeyEvent(int action, int code);
 }
