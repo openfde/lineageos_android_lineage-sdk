@@ -210,18 +210,6 @@ public class WayDroidService extends LineageSystemService {
         return bitmap;
     }
 
-    private boolean sendEvent(int action, int code, int flags) {
-        long when = SystemClock.uptimeMillis();
-        final KeyEvent ev = new KeyEvent(when, when, action, code, 0 /* repeat */,
-                0 /* metaState */, KeyCharacterMap.VIRTUAL_KEYBOARD, 0 /* scancode */,
-                flags | KeyEvent.FLAG_FROM_SYSTEM | KeyEvent.FLAG_VIRTUAL_HARD_KEY,
-                InputDevice.SOURCE_KEYBOARD);
-
-        ev.setDisplayId(mContext.getDisplay().getDisplayId());
-        return InputManager.getInstance().injectInputEvent(
-                ev, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
-    }
-
     private void registerPackageMonitor() {
         PackageMonitor monitor = new PackageMonitor() {
             @Override
@@ -423,8 +411,6 @@ public class WayDroidService extends LineageSystemService {
         public void launchApp(String packageName) {
             if (mPm == null || mContext == null)
                 return;
-
-            sendEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HOME, KeyEvent.FLAG_LONG_SWIPE);
             mPackageName = packageName;
             mHandler.post(mPollRunnable);
         }
