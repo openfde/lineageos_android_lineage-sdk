@@ -57,6 +57,17 @@ import java.io.OutputStream;
 import java.io.FileOutputStream;
 
 import libcore.io.IoUtils;
+import android.hardware.input.InputManager;
+import android.view.KeyEvent;
+import android.view.KeyCharacterMap;
+import android.os.SystemClock;
+import android.view.InputDevice;
+import android.os.Handler;
+import android.os.Looper;
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.os.SystemProperties;
+
 
 /** @hide **/
 public class WayDroidService extends LineageSystemService {
@@ -67,9 +78,42 @@ public class WayDroidService extends LineageSystemService {
             "org.lineageos.platform.waydroid.ACTION_UNINSTALL_COMMIT";
     private static final String ICONS_DIR = "/data/icons";
 
+    private static final String LOAD_DESKTOP_STATUS = "finish_desktop";
+
+    private static final String START_LOAD_DESKTOP = "0";
+    private static final String FINISH_LOAD_DESKTOP = "1";
+
     private Context mContext;
     private PackageManager mPm = null;
     private UserMonitor mUM = null;
+    private String mPackageName = "";
+
+    private Handler mHandler = new Handler();
+    private Runnable mPollRunnable = new Runnable() {
+        @Override
+        public void run() {
+            String isRunning = SystemProperties.get(LOAD_DESKTOP_STATUS,START_LOAD_DESKTOP);
+            Log.w(TAG, "isAppRunning  "+isRunning + ",mPackageName "+mPackageName);
+            mHandler.postDelayed(this, 2000); // 
+            
+            if(FINISH_LOAD_DESKTOP.equals(isRunning)){
+                ApplicationInfo appInfo;
+                try {
+                    appInfo = mPm.getApplicationInfo(mPackageName, 0);
+                } catch (NameNotFoundException e) {
+                    Log.e(TAG, e.getMessage());
+                    return;
+                }
+                Intent launchIntent = mPm.getLaunchIntentForPackage(appInfo.packageName);
+                if (launchIntent == null) {
+                    return;
+                }
+
+                mContext.startActivity(launchIntent);
+                mHandler.removeCallbacks(mPollRunnable);
+            }
+        }
+    };
 
     public WayDroidService(Context context) {
         super(context);
@@ -164,6 +208,18 @@ public class WayDroidService extends LineageSystemService {
         drawable.draw(canvas);
 
         return bitmap;
+    }
+
+    private boolean sendEvent(int action, int code, int flags) {
+        long when = SystemClock.uptimeMillis();
+        final KeyEvent ev = new KeyEvent(when, when, action, code, 0 /* repeat */,
+                0 /* metaState */, KeyCharacterMap.VIRTUAL_KEYBOARD, 0 /* scancode */,
+                flags | KeyEvent.FLAG_FROM_SYSTEM | KeyEvent.FLAG_VIRTUAL_HARD_KEY,
+                InputDevice.SOURCE_KEYBOARD);
+
+        ev.setDisplayId(mContext.getDisplay().getDisplayId());
+        return InputManager.getInstance().injectInputEvent(
+                ev, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
     }
 
     private void registerPackageMonitor() {
@@ -368,19 +424,9 @@ public class WayDroidService extends LineageSystemService {
             if (mPm == null || mContext == null)
                 return;
 
-            ApplicationInfo appInfo;
-            try {
-                appInfo = mPm.getApplicationInfo(packageName, 0);
-            } catch (NameNotFoundException e) {
-                Log.e(TAG, e.getMessage());
-                return;
-            }
-            Intent launchIntent = mPm.getLaunchIntentForPackage(appInfo.packageName);
-            if (launchIntent == null) {
-                return;
-            }
-
-            mContext.startActivity(launchIntent);
+            sendEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HOME, KeyEvent.FLAG_LONG_SWIPE);
+            mPackageName = packageName;
+            mHandler.post(mPollRunnable);
         }
 
         @Override
