@@ -110,7 +110,7 @@ public class WayDroidService extends LineageSystemService {
 
     @Override
     public void onUserUnlocking(TargetUser targetUser) {
-        /*List<ApplicationInfo> apps = mPm.getInstalledApplications(0);
+        List<ApplicationInfo> apps = mPm.getInstalledApplications(0);
         for (int n = 0; n < apps.size(); n++) {
             ApplicationInfo appInfo = apps.get(n);
 
@@ -119,7 +119,7 @@ public class WayDroidService extends LineageSystemService {
                 continue;
             }
             saveApplicationIcon(appInfo.packageName);
-        }*/
+        }
         if (mUM != null) {
             mUM.userUnlocked(targetUser.getUserIdentifier());
         }
@@ -150,7 +150,7 @@ public class WayDroidService extends LineageSystemService {
             iconBitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutStream);
             fileOutStream.close();
         } catch (IOException e) {
-            Log.e("app", e.getMessage());
+            Log.e(TAG, e.getMessage());
             if (fileOutStream != null) {
                 try {
                     fileOutStream.close();
