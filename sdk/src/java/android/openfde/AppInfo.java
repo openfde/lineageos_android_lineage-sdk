@@ -8,6 +8,7 @@ import java.util.List;
 public final class AppInfo implements Parcelable {
     public String name;
     public String packageName;
+    public String version;
     public String action;
     public String launchIntent;
     public String componentPackageName;
@@ -34,6 +35,7 @@ public final class AppInfo implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(name);
         out.writeString(packageName);
+        out.writeString(version);
         out.writeString(action);
         out.writeString(launchIntent);
         out.writeString(componentPackageName);
@@ -44,6 +46,7 @@ public final class AppInfo implements Parcelable {
     public void readFromParcel(Parcel in) {
         name = in.readString();
         packageName = in.readString();
+        version = in.readString();
         action = in.readString();
         launchIntent = in.readString();
         componentPackageName = in.readString();

@@ -55,8 +55,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
+import android.os.Handler;
 
 import libcore.io.IoUtils;
+import android.content.pm.PackageInfo;
+
 
 /** @hide **/
 public class WayDroidService extends LineageSystemService {
@@ -67,9 +70,14 @@ public class WayDroidService extends LineageSystemService {
             "org.lineageos.platform.waydroid.ACTION_UNINSTALL_COMMIT";
     private static final String ICONS_DIR = "/data/icons";
 
+    private static final String LOAD_DESKTOP_STATUS = "finish_desktop";
+
+    private static final String FINISH_UN_LOAD_DESKTOP = "0";
+
     private Context mContext;
     private PackageManager mPm = null;
     private UserMonitor mUM = null;
+    private String mPackageName = null;
 
     public WayDroidService(Context context) {
         super(context);
@@ -246,6 +254,7 @@ public class WayDroidService extends LineageSystemService {
                 AppInfo info = new AppInfo();
                 info.name = name;
                 info.packageName = appInfo.packageName;
+                info.version = getAppVersion(info);
                 info.action = launchIntent.getAction();
                 if (launchIntent.getData() != null)
                     info.launchIntent = launchIntent.getData().toString();
@@ -284,6 +293,7 @@ public class WayDroidService extends LineageSystemService {
             AppInfo info = new AppInfo();
             info.name = name;
             info.packageName = appInfo.packageName;
+            info.version = getAppVersion(info);
             info.action = launchIntent.getAction();
             if (launchIntent.getData() != null)
                 info.launchIntent = launchIntent.getData().toString();
@@ -375,12 +385,13 @@ public class WayDroidService extends LineageSystemService {
                 Log.e(TAG, e.getMessage());
                 return;
             }
-            Intent launchIntent = mPm.getLaunchIntentForPackage(appInfo.packageName);
-            if (launchIntent == null) {
-                return;
+            mPackageName = appInfo.packageName;
+            String isFinishDesktop = SystemProperties.get(LOAD_DESKTOP_STATUS,FINISH_UN_LOAD_DESKTOP);
+            if(FINISH_UN_LOAD_DESKTOP.equals(isFinishDesktop)){
+               handler.postDelayed(delayedTask, 1000 * 3);
+            }else{
+               startPackage();
             }
-
-            mContext.startActivity(launchIntent);
         }
 
         @Override
@@ -474,6 +485,42 @@ public class WayDroidService extends LineageSystemService {
                 Log.e(TAG, e.getMessage());
             }
             return Platform.ERROR_UNDEFINED;
+        }
+    };
+
+    private String getAppVersion(AppInfo appInfo) {
+        try {
+            PackageInfo packageInfo = mContext.getPackageManager().getPackageInfo(appInfo.packageName, 0);
+            return packageInfo.versionName; 
+        } catch (Exception e) {
+            Log.e(TAG, "getAppsInfo " + e.toString());
+            e.printStackTrace();
+            return  "unkown";
+        }
+    }
+
+    private void startPackage() {
+        try {
+            if(mPackageName == null || mContext == null){
+                return;
+            }   
+            Intent launchIntent = mPm.getLaunchIntentForPackage(mPackageName);
+            if (launchIntent == null) {
+                return;
+            }
+            mContext.startActivity(launchIntent);
+        } catch (Exception e) {
+            Log.e(TAG, "startPackage " + e.toString());
+            e.printStackTrace();
+        }
+    }
+
+    private Handler handler = new Handler();
+    private Runnable delayedTask = new Runnable() {
+        @Override
+        public void run() {
+            startPackage();
+            handler.removeCallbacks(delayedTask);
         }
     };
 }
