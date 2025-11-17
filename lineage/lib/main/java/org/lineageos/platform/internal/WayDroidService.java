@@ -357,7 +357,7 @@ public class WayDroidService extends LineageSystemService {
                   mContext, // context
                   0, // arbitary
                   broadcastIntent,
-                  PendingIntent.FLAG_UPDATE_CURRENT);
+                  PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
           packageInstaller.uninstall(packageName, pendingIntent.getIntentSender());
 
           return 0;
