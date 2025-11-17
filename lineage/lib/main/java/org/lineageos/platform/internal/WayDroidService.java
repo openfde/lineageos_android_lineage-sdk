@@ -37,6 +37,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
+import android.view.inputmethod.InputMethodManager;
 
 import com.android.internal.content.PackageMonitor;
 import com.android.internal.os.BackgroundThread;
@@ -55,8 +56,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
+import android.os.Handler;
 
 import libcore.io.IoUtils;
+import android.content.pm.PackageInfo;
+
 
 /** @hide **/
 public class WayDroidService extends LineageSystemService {
@@ -67,9 +71,14 @@ public class WayDroidService extends LineageSystemService {
             "org.lineageos.platform.waydroid.ACTION_UNINSTALL_COMMIT";
     private static final String ICONS_DIR = "/data/icons";
 
+    private static final String LOAD_DESKTOP_STATUS = "finish_desktop";
+
+    private static final String FINISH_UN_LOAD_DESKTOP = "0";
+
     private Context mContext;
     private PackageManager mPm = null;
     private UserMonitor mUM = null;
+    private String mPackageName = null;
 
     public WayDroidService(Context context) {
         super(context);
@@ -101,7 +110,7 @@ public class WayDroidService extends LineageSystemService {
 
     @Override
     public void onUserUnlocking(TargetUser targetUser) {
-        /*List<ApplicationInfo> apps = mPm.getInstalledApplications(0);
+        List<ApplicationInfo> apps = mPm.getInstalledApplications(0);
         for (int n = 0; n < apps.size(); n++) {
             ApplicationInfo appInfo = apps.get(n);
 
@@ -110,7 +119,7 @@ public class WayDroidService extends LineageSystemService {
                 continue;
             }
             saveApplicationIcon(appInfo.packageName);
-        }*/
+        }
         if (mUM != null) {
             mUM.userUnlocked(targetUser.getUserIdentifier());
         }
@@ -141,7 +150,7 @@ public class WayDroidService extends LineageSystemService {
             iconBitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutStream);
             fileOutStream.close();
         } catch (IOException e) {
-            Log.e("app", e.getMessage());
+            Log.e(TAG, e.getMessage());
             if (fileOutStream != null) {
                 try {
                     fileOutStream.close();
@@ -246,6 +255,7 @@ public class WayDroidService extends LineageSystemService {
                 AppInfo info = new AppInfo();
                 info.name = name;
                 info.packageName = appInfo.packageName;
+                info.version = getAppVersion(info);
                 info.action = launchIntent.getAction();
                 if (launchIntent.getData() != null)
                     info.launchIntent = launchIntent.getData().toString();
@@ -284,6 +294,7 @@ public class WayDroidService extends LineageSystemService {
             AppInfo info = new AppInfo();
             info.name = name;
             info.packageName = appInfo.packageName;
+            info.version = getAppVersion(info);
             info.action = launchIntent.getAction();
             if (launchIntent.getData() != null)
                 info.launchIntent = launchIntent.getData().toString();
@@ -375,12 +386,13 @@ public class WayDroidService extends LineageSystemService {
                 Log.e(TAG, e.getMessage());
                 return;
             }
-            Intent launchIntent = mPm.getLaunchIntentForPackage(appInfo.packageName);
-            if (launchIntent == null) {
-                return;
+            mPackageName = appInfo.packageName;
+            String isFinishDesktop = SystemProperties.get(LOAD_DESKTOP_STATUS,FINISH_UN_LOAD_DESKTOP);
+            if(FINISH_UN_LOAD_DESKTOP.equals(isFinishDesktop)){
+               handler.postDelayed(delayedTask, 1000 * 3);
+            }else{
+               startPackage();
             }
-
-            mContext.startActivity(launchIntent);
         }
 
         @Override
@@ -474,6 +486,53 @@ public class WayDroidService extends LineageSystemService {
                 Log.e(TAG, e.getMessage());
             }
             return Platform.ERROR_UNDEFINED;
+        }
+        @Override
+        public void commitText(String text) {
+            Log.d(TAG, "commitText: " + text);
+            InputMethodManager.getInstance().commitText(text);
+        }
+
+        @Override
+        public void sendKeyEvent(int action, int code) {
+            Log.d(TAG, "sendKeyEvent action: " + action + ", code: " + code);
+            InputMethodManager.getInstance().sendKeyEvent(action, code);
+        }
+    };
+
+    private String getAppVersion(AppInfo appInfo) {
+        try {
+            PackageInfo packageInfo = mContext.getPackageManager().getPackageInfo(appInfo.packageName, 0);
+            return packageInfo.versionName; 
+        } catch (Exception e) {
+            Log.e(TAG, "getAppsInfo " + e.toString());
+            e.printStackTrace();
+            return  "unkown";
+        }
+    }
+
+    private void startPackage() {
+        try {
+            if(mPackageName == null || mContext == null){
+                return;
+            }   
+            Intent launchIntent = mPm.getLaunchIntentForPackage(mPackageName);
+            if (launchIntent == null) {
+                return;
+            }
+            mContext.startActivity(launchIntent);
+        } catch (Exception e) {
+            Log.e(TAG, "startPackage " + e.toString());
+            e.printStackTrace();
+        }
+    }
+
+    private Handler handler = new Handler();
+    private Runnable delayedTask = new Runnable() {
+        @Override
+        public void run() {
+            startPackage();
+            handler.removeCallbacks(delayedTask);
         }
     };
 }
