@@ -137,10 +137,15 @@ public class WayDroidService extends LineageSystemService {
         try {
             icon = mPm.getApplicationIcon(packageName);
         } catch (PackageManager.NameNotFoundException ex) {
+            Log.e(TAG,"icon get error !");
+            ex.printStackTrace();
             return;
         }
-        if (icon == null)
-            return;
+        if (icon == null){
+             Log.e(TAG,"icon is null");
+             return;
+        }
+           
 
         Bitmap iconBitmap = drawableToBitmap(icon);
         File imageFile = new File(ICONS_DIR, packageName + ".png");
@@ -179,10 +184,6 @@ public class WayDroidService extends LineageSystemService {
         PackageMonitor monitor = new PackageMonitor() {
             @Override
             public void onPackageAdded(String packageName, int uid) {
-                if(true){
-                    Log.e(TAG, "onPackageAdded " + packageName);
-                    return;
-                }
                 if (mUM != null) {
                     mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName, uid);
                 }
@@ -191,10 +192,6 @@ public class WayDroidService extends LineageSystemService {
 
             @Override
             public void onPackageRemoved(String packageName, int uid) {
-                if(true){
-                    Log.e(TAG, "onPackageRemoved " + packageName);
-                    return;
-                }
                 if (mUM != null) {
                     mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_REMOVED, packageName, uid);
                 }
@@ -205,10 +202,6 @@ public class WayDroidService extends LineageSystemService {
 
             @Override
             public void onPackageUpdateFinished(String packageName, int uid) {
-                if(true){
-                    Log.e(TAG, "onPackageUpdateFinished " + packageName);
-                    return;
-                }
                 if (mUM != null) {
                     mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_UPDATED, packageName, uid);
                 }
