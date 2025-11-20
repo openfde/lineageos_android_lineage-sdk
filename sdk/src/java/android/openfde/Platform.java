@@ -137,12 +137,12 @@ public class Platform {
         return null;
     }
 
-    public int installApp(String path) {
+    public int installApp(String path,String fileName) {
         if (sService == null) {
             return ERROR_UNDEFINED;
         }
         try {
-            return sService.installApp(path);
+            return sService.installApp(path,fileName);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
@@ -260,4 +260,72 @@ public class Platform {
         }
         return;
     }
+
+    public void stopApp(String packageName) {
+        Log.w(TAG, " stopApp packageName: "+packageName);
+        if (sService == null) {
+            return;
+        }
+        try {
+            Log.w(TAG, " stopApp packageName: "+packageName);
+            sService.stopApp(packageName);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
+
+    public String compatbileGet(String packageName,String activityName,String keyCode) {
+        Log.w(TAG, " compatbileGet packageName: "+packageName);
+        if (sService == null) {
+            return null;
+        }
+        try {
+            Log.w(TAG, " compatbileGet packageName: "+packageName);
+            return sService.compatbileGet(packageName, activityName,keyCode);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return null;
+    }
+
+    public void compatbileSet(String packageName,String activityName,String keyCode,String value) {
+        Log.w(TAG, " compatbileSet packageName: "+packageName);
+        if (sService == null) {
+            return;
+        }
+        try {
+            Log.w(TAG, " compatbileSet packageName: "+packageName);
+            sService.compatbileSet(packageName,activityName,keyCode,value);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
+
+    public void installAppCallBack(String packageName,int code,String msg) {
+        if (sService == null) {
+            return;
+        }
+        try {
+            sService.installAppCallBack(packageName,code,msg);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
+
+    public void finishAppCallBack(String packageName,int code,String msg) {
+        if (sService == null) {
+            return;
+        }
+        try {
+            sService.finishAppCallBack(packageName,code,msg);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
+
+
 }

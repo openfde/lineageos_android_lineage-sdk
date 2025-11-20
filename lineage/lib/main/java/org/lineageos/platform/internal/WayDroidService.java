@@ -51,6 +51,8 @@ import android.openfde.UserMonitor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,7 +62,8 @@ import android.os.Handler;
 
 import libcore.io.IoUtils;
 import android.content.pm.PackageInfo;
-
+import com.android.internal.util.CompatibleConfig;
+import android.app.ActivityManager;
 
 /** @hide **/
 public class WayDroidService extends LineageSystemService {
@@ -79,6 +82,9 @@ public class WayDroidService extends LineageSystemService {
     private PackageManager mPm = null;
     private UserMonitor mUM = null;
     private String mPackageName = null;
+
+    private Map<String,Object> installMap ;
+
 
     public WayDroidService(Context context) {
         super(context);
@@ -184,10 +190,27 @@ public class WayDroidService extends LineageSystemService {
         PackageMonitor monitor = new PackageMonitor() {
             @Override
             public void onPackageAdded(String packageName, int uid) {
-                if (mUM != null) {
-                    mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName, uid);
-                }
+                // if (mUM != null) {
+                //     mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName, uid);
+                // }
                 saveApplicationIcon(packageName);
+                String versionName = "0.0";
+                try {
+                    PackageInfo packageInfo = mContext.getPackageManager().getPackageInfo(packageName, 0);
+                    versionName = packageInfo.versionName; 
+                    int versionCode = packageInfo.versionCode; 
+                    Log.w(TAG, "onPackageAdded versionName " + versionName + ",versionCode "+versionCode);
+                } catch (Exception e) {
+                    Log.e(TAG, "onPackageAdded " + e.toString());
+                    e.printStackTrace();
+                }
+                String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
+                if ("false".equals(prop)){
+                    return;
+                }
+                if (mUM != null) {
+                    mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName,versionName, uid);
+                }
             }
 
             @Override
@@ -202,10 +225,23 @@ public class WayDroidService extends LineageSystemService {
 
             @Override
             public void onPackageUpdateFinished(String packageName, int uid) {
-                if (mUM != null) {
-                    mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_UPDATED, packageName, uid);
-                }
+                // if (mUM != null) {
+                //     mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_UPDATED, packageName, uid);
+                // }
                 saveApplicationIcon(packageName);
+
+                try {
+                    PackageInfo packageInfo = mContext.getPackageManager().getPackageInfo(packageName, 0);
+                    String versionName = packageInfo.versionName; 
+                    int versionCode = packageInfo.versionCode; 
+                    Log.w(TAG, "onPackageUpdateFinished versionName " + versionName + ",versionCode "+versionCode);
+                    if (mUM != null) {
+                        mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_UPDATED, packageName,versionName, uid);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "onPackageUpdateFinished " + e.toString());
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -301,7 +337,8 @@ public class WayDroidService extends LineageSystemService {
         }
 
         @Override
-        public int installApp(String path) {
+        public int installApp(String path,String fileName) {
+            Log.w(TAG, "installApp " + path +",fileName: "+fileName);
             int ret = 0;
             final Uri packageURI;
 
@@ -316,8 +353,9 @@ public class WayDroidService extends LineageSystemService {
                     PackageInstaller.SessionParams.MODE_FULL_INSTALL);
             final PackageInstaller packageInstaller = mPm.getPackageInstaller();
             PackageInstaller.Session session = null;
+            int sessionId = 0;
             try {
-                final int sessionId = packageInstaller.createSession(params);
+                sessionId = packageInstaller.createSession(params);
                 final byte[] buffer = new byte[65536];
                 session = packageInstaller.openSession(sessionId);
                 final InputStream in = mContext.getContentResolver().openInputStream(packageURI);
@@ -340,9 +378,16 @@ public class WayDroidService extends LineageSystemService {
                         broadcastIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
                 session.commit(pendingIntent.getIntentSender());
+                Log.w(TAG, "installApp  commit sessionId:  "+sessionId );
+                installMap = new HashMap<>();
+                installMap.put("sessionId", sessionId);
+                installMap.put("fileName", fileName);
             } catch (IOException e) {
                 Log.e(TAG, "Failure", e);
                 ret = -1;
+                if (mUM != null) {
+                     mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_ADDED, fileName,sessionId+"###"+e.toString(), 0);
+                }
             } finally {
                 IoUtils.closeQuietly(session);
             }
@@ -490,6 +535,57 @@ public class WayDroidService extends LineageSystemService {
         public void sendKeyEvent(int action, int code) {
             Log.d(TAG, "sendKeyEvent action: " + action + ", code: " + code);
             InputMethodManager.getInstance().sendKeyEvent(action, code);
+        }
+
+        @Override
+        public void stopApp(String packageName) {
+            Log.w(TAG, "stopApp " + packageName);
+            if (mContext == null)
+                return;
+            ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+            am.forceStopPackage(packageName); 
+            
+            // String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
+            // if ("false".equals(prop)){
+            //     return;
+            // }
+            if (mUM != null) {
+                mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_FINISH, packageName, 0);
+            }
+        }
+
+        @Override
+        public String compatbileGet(String packageName,String activityName,String keyCode) {
+            Log.w(TAG, "compatbileGet " + packageName + ",activityName "+activityName + ",keyCode "+keyCode);
+            if (mContext == null)
+                return null;
+            String res = CompatibleConfig.queryValueDataBySharedMemory(mContext,packageName,activityName,keyCode);
+            Log.w(TAG,"getCompatibleConfig res: "+res);
+            return res;   
+        }
+
+        @Override
+        public void  compatbileSet(String packageName,String activityName,String keyCode,String value) {
+            Log.w(TAG, "compatbileSet " + packageName+ ",activityName "+activityName+ ",keyCode "+keyCode + ",value "+value);
+            if (mContext == null)
+                return;
+            CompatibleConfig.insertUpdateValueData(mContext,packageName,activityName,keyCode,value);
+        }
+
+        @Override
+        public void installAppCallBack(String packageName,int code,String msg) {
+            Log.w(TAG, "installAppCallBack packageName: " + packageName + ",code "+code + ",msg "+msg);
+            if (mUM != null) {
+                mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName,code+"###"+msg, 0);
+            }
+        }
+
+        @Override
+        public void finishAppCallBack(String packageName,int code,String msg) {
+            Log.w(TAG, "finishAppCallBack packageName: " + packageName + ",code "+code + ",msg "+msg);
+            if (mUM != null) {
+                mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_FINISH, packageName, 0);
+            }
         }
     };
 

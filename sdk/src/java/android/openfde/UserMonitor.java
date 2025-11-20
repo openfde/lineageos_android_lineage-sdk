@@ -30,6 +30,8 @@ public class UserMonitor {
     public static final int WAYDROID_PACKAGE_ADDED = 0;
     public static final int WAYDROID_PACKAGE_REMOVED = 1;
     public static final int WAYDROID_PACKAGE_UPDATED = 2;
+    public static final int WAYDROID_PACKAGE_START = 3;
+    public static final int WAYDROID_PACKAGE_FINISH = 4;
 
     private static IUserMonitor sService;
     private static UserMonitor sInstance;
@@ -92,6 +94,19 @@ public class UserMonitor {
         }
         try {
             service.packageStateChanged(mode, packageName, uid);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return;
+    }
+
+    public void packageStateChangedHasVernsion(int mode, String packageName,String version, int uid) {
+        IUserMonitor service = getService();
+        if (service == null) {
+            return;
+        }
+        try {
+            service.packageStateChangedHasVernsion(mode, packageName,version, uid);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }

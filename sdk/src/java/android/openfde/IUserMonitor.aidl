@@ -20,4 +20,5 @@ package android.openfde;
 interface IUserMonitor {
     void userUnlocked(int uid);
     void packageStateChanged(int mode, String packageName, int uid);
+    void packageStateChangedHasVernsion(int mode, String packageName,String version, int uid);
 }
