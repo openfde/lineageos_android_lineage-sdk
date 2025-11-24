@@ -25,7 +25,7 @@ interface IPlatform {
 
     List<AppInfo> getAppsInfo();
     AppInfo getAppInfo(String packageName);
-    int installApp(String path);
+    int installApp(String path,String fileName);
     int removeApp(String packageName);
     void launchApp(String packageName);
     String getAppName(String packageName);
@@ -37,4 +37,9 @@ interface IPlatform {
     String launchIntent(String action, String uri);
     void commitText(String text);
     void sendKeyEvent(int action, int code);
+    void stopApp(String packageName);
+    String compatbileGet(String packageName,String activityName,String keyCode);
+    void compatbileSet(String packageName,String activityName,String keyCode,String value);
+    void installAppCallBack(String packageName,int code,String msg);
+    void finishAppCallBack(String packageName,int code,String msg);
 }
