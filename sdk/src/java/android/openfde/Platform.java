@@ -58,6 +58,15 @@ public class Platform {
                 }
     }
 
+    private Platform() {
+        sService = getService();
+        if (sService == null) {
+            throw new RuntimeException("Unable to get WayDroidService. The service" +
+                    " either crashed, was not started, or the interface has been called to early" +
+                    " in SystemServer init");
+                }
+    }
+
     /**
      * Get or create an instance of the {@link lineageos.waydroid.Platform}
      *

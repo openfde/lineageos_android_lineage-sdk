@@ -204,10 +204,6 @@ public class WayDroidService extends LineageSystemService {
                     Log.e(TAG, "onPackageAdded " + e.toString());
                     e.printStackTrace();
                 }
-                String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
-                if ("false".equals(prop)){
-                    return;
-                }
                 if (mUM != null) {
                     mUM.packageStateChangedHasVernsion(UserMonitor.WAYDROID_PACKAGE_ADDED, packageName,versionName, uid);
                 }
@@ -416,7 +412,7 @@ public class WayDroidService extends LineageSystemService {
         public void launchApp(String packageName) {
             if (mPm == null || mContext == null)
                 return;
-
+            Log.d(TAG, "launchApp " + packageName);
             ApplicationInfo appInfo;
             try {
                 appInfo = mPm.getApplicationInfo(packageName, 0);
@@ -545,10 +541,6 @@ public class WayDroidService extends LineageSystemService {
             ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
             am.forceStopPackage(packageName); 
             
-            // String prop = SystemProperties.get("persist.waydroid.multi_windows","false");
-            // if ("false".equals(prop)){
-            //     return;
-            // }
             if (mUM != null) {
                 mUM.packageStateChanged(UserMonitor.WAYDROID_PACKAGE_FINISH, packageName, 0);
             }
