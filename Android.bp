@@ -199,3 +199,20 @@ java_library {
         "com.android.tethering",
     ],
 }
+
+// The openfde SDK
+// ============================================================
+
+droidstubs {
+    name: "openfde_sdk_gen",
+    srcs: ["sdk/src/java/android/openfde/AppTaskControllerImpl.java"],
+    args: "--hide-annotation android.annotation.Hide",
+}
+
+java_library {
+    name: "openfde_sdk",
+    min_sdk_version: "30",
+    srcs: [":openfde_sdk_gen"],
+    installable: false,
+    sdk_version: "current",
+}
