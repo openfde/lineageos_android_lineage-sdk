@@ -234,3 +234,11 @@ java_library {
 
     installable: false,
 }
+
+filegroup {
+    name: "openfde-sdk-sources",
+    srcs: ["sdk/src/java/android/openfde/AppTaskControllerImpl.java",
+            "sdk/src/java/android/openfde/AppTaskStatusListener.java"
+    ],
+    visibility: ["//frameworks/base"],
+}

@@ -1,5 +1,9 @@
 package android.openfde;
 
+
+/**
+ * @hide
+ */
 public interface AppTaskStatusListener {
 
     public static final int WINDOWING_MODE_UNDEFINED =     0;   // {@link WindowConfiguration#WINDOWING_MODE_UNDEFINED} windowing
