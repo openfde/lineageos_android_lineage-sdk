@@ -16,7 +16,6 @@ import java.util.List;
 import com.android.internal.policy.DecorView;
 import com.android.internal.policy.AppTaskController;
 import com.android.internal.policy.DecorWindowInsetsCallback;
-import com.android.internal.policy.AppTaskStatusListener;
 import com.android.internal.policy.TaskRemoteServiceWrapper;
 import com.android.internal.policy.SystemBarController;
 

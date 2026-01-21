@@ -206,7 +206,9 @@ java_library {
 // 1. 生成 Stubs 源码
 droidstubs {
     name: "openfde_sdk_gen",
-    srcs: ["sdk/src/java/android/openfde/AppTaskControllerImpl.java"],
+    srcs: ["sdk/src/java/android/openfde/AppTaskControllerImpl.java",
+            "sdk/src/java/android/openfde/AppTaskStatusListener.java"
+    ],
     // 允许 droidstubs 查找系统内部依赖
     sdk_version: "core_platform",
     libs: [
