@@ -203,10 +203,32 @@ java_library {
 // The openfde SDK
 // ============================================================
 
-// 直接编译这个类
+// 1. 生成 Stubs 源码
+droidstubs {
+    name: "openfde_sdk_gen",
+    srcs: ["sdk/src/java/android/openfde/AppTaskControllerImpl.java"],
+    // 允许 droidstubs 查找系统内部依赖
+    sdk_version: "core_platform",
+    libs: [
+        "framework",
+    ],
+    args: "--hide-annotation android.annotation.Hide " +
+          "--show-unannotated " +
+          "--stub-packages android.openfde",
+}
+
+// 2. 编译成 Stub JAR
 java_library {
     name: "openfde_sdk",
-    srcs: ["sdk/src/java/android/openfde/AppTaskControllerImpl.java"],
-    sdk_version: "current",
+    srcs: [":openfde_sdk_gen"],
+
+    // 关键修改：允许访问系统内部 API (Hidden APIs)
+    platform_apis: true,
+
+    // 显式引入包含 ActivityTaskManager 和 internal.policy 的库
+    libs: [
+        "framework",
+    ],
+
     installable: false,
 }
