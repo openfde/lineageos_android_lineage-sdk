@@ -208,6 +208,7 @@ java_library {
     srcs: [
         "sdk/src/java/android/openfde/AppTaskControllerImpl.java",
         "sdk/src/java/android/openfde/AppTaskStatusListener.java",
+        "sdk/src/java/android/openfde/AppTaskControllerProxy.java",
     ],
 
     platform_apis: true,
@@ -221,8 +222,8 @@ java_library {
 
 filegroup {
     name: "openfde-sdk-sources",
-    srcs: ["sdk/src/java/android/openfde/AppTaskControllerImpl.java",
            "sdk/src/java/android/openfde/AppTaskStatusListener.java",
+           "sdk/src/java/android/openfde/AppTaskControllerProxy.java",
     ],
     visibility: ["//frameworks/base"],
 }
