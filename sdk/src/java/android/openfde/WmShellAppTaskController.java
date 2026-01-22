@@ -32,6 +32,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
     private ActivityManager.RunningTaskInfo mTaskInfo;
     private boolean mIsRawCaptionHidden;
     private boolean mLinkedToWMshell;
+    private boolean beenLinkToWmShell;
     private ActivityManager mActivityManager;
     private ActivityTaskManager mActivityTaskManager;
     private int mWindowingMode = AppTaskStatusListener.WINDOWING_MODE_FREEFORM;
@@ -100,7 +101,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         mDecorView.setWindowInsetsCallback(this);
 
         // Update system bar controller
-        updateSystemBarController();
+        updateSystemBarController(null);
 
         // Get initial state
         mWindowingMode = getCurrentWindowingMode(activity.get());
@@ -167,7 +168,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
      * This method registers a SystemBarController with TaskRemoteServiceWrapper
      * which will create and manage the IAppSystemBarController.Stub callback.
      */
-    private void updateSystemBarController() {
+    public void updateSystemBarController(SystemBarController systemBarController) {
         Log.d(TAG, "Updating system bar controller");
 
         Activity activity = mActivity != null ? mActivity.get() : null;
@@ -198,24 +199,26 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
             // Update task info
             mTaskInfo = taskInfo;
             Log.d(TAG, "Registering system bar controller for new task: " + taskInfo.taskId);
+            if (systemBarController == null) {
+                systemBarController = new SystemBarController() {
+                    @Override
+                    public void hideStatusBarNavigationBar() {
+                        Log.d(TAG, "SystemBarController: hideStatusBarNavigationBar");
+                        toggleStatusBarNavigationBar(true);
+                    }
+
+                    @Override
+                    public void showStatusBarNavigationBar() {
+                        Log.d(TAG, "SystemBarController: showStatusBarNavigationBar");
+                        toggleStatusBarNavigationBar(false);
+                    }
+                };
+            }
 
             // Create and register new controller
             // Note: TaskRemoteServiceWrapper will create the IAppSystemBarController.Stub callback
-            mServiceWrapper.registerSystemBarController(taskInfo.taskId,
-                    new SystemBarController() {
-                        @Override
-                        public void hideStatusBarNavigationBar() {
-                            Log.d(TAG, "SystemBarController: hideStatusBarNavigationBar");
-                            toggleStatusBarNavigationBar(true);
-                        }
-
-                        @Override
-                        public void showStatusBarNavigationBar() {
-                            Log.d(TAG, "SystemBarController: showStatusBarNavigationBar");
-                            toggleStatusBarNavigationBar(false);
-                        }
-                    });
-
+            mServiceWrapper.registerSystemBarController(taskInfo.taskId, systemBarController);
+            beenLinkToWmShell = true;
             Log.i(TAG, "System bar controller updated successfully");
         } catch (Exception e) {
             Log.e(TAG, "Unexpected error updating system bar controller", e);
@@ -395,7 +398,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
     public void onApplyWindowInsets() {
         Log.d(TAG, "Window insets applied");
         // Update system bar controller when window insets change
-        updateSystemBarController();
+        updateSystemBarController(null);
         // Notify status change
         onStatusChanged();
     }
@@ -513,6 +516,10 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
      */
     public boolean isLinkedToWMshell() {
         return mLinkedToWMshell;
+    }
+
+    public boolean hasBeenLinkToWmShell(){
+        return beenLinkToWmShell;
     }
 
     public String getStatus() {
