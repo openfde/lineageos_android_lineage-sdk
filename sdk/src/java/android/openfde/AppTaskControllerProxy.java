@@ -12,7 +12,7 @@ public class AppTaskControllerProxy {
 
     private final AppTaskControllerImpl mImpl;
 
-    private static AppTaskControllerProxy() {
+    private AppTaskControllerProxy() {
         mImpl = new AppTaskControllerImpl();
     }
 
@@ -51,6 +51,6 @@ public class AppTaskControllerProxy {
     }
 
     public void cleanup(){
-        return mImpl.cleanup();
+        mImpl.cleanup();
     }
 }
