@@ -236,7 +236,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
             Log.w(TAG, "Activity is null in getTaskInfoFromActivity");
             return null;
         }
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         try {
             List<ActivityManager.RunningTaskInfo> runningTasks =
                     activityManager.getRunningTasks(Integer.MAX_VALUE);
