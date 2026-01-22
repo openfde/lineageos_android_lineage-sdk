@@ -21,12 +21,6 @@ public class AppTaskControllerProxy {
         return new AppTaskControllerProxy();
     }
 
-    public static final int OPERATION_CLOSE = 0;
-    public static final int OPERATION_BACK = 1;
-    public static final int OPERATION_FULLSCREEN = 2;
-    public static final int OPERATION_MINIMIZE = 3;
-    public static final int OPERATION_MAXIMIZE = 4;
-
     public void initCustomCaption(WeakReference<Activity> activity, AppTaskStatusListener listener, boolean hideRawCaption) {
         mImpl.initCustomCaption(activity, listener, hideRawCaption);
     }
@@ -73,7 +67,7 @@ public class AppTaskControllerProxy {
                 public void toggleStatusBarNavigationBar(boolean hide){
                     AppTaskControllerProxy.this.toggleStatusBarNavigationBar(hide);
                 }
-            }
+            };
         }
         return mSystemBarOperator;
     }
@@ -85,7 +79,7 @@ public class AppTaskControllerProxy {
                 public void callTaskOperation(int opCode){
                     AppTaskControllerProxy.this.callTaskOperation(opCode);
                 }
-            }
+            };
         }
         return mWmShellCaller;
     }

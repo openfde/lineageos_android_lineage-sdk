@@ -445,6 +445,11 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
      */
     public void callTaskOperation(int operation) {
         Log.d(TAG, "Calling task operation: " + operation);
+        if(operation > TASK_CAPTION_OPERATION_WINDOWDECORATION_RELAYOUT ||
+                operation < TASK_CAPTION_OPERATION_CLOSE){
+            Log.e(TAG, "illegal opCode:" + operation);
+            return;
+        }
 
         synchronized (mLock) {
             // Ensure we have valid task info
