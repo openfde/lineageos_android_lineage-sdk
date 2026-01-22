@@ -25,8 +25,8 @@ import com.android.internal.policy.SystemBarController;
  * Works in conjunction with TaskRemoteServiceWrapper for remote service operations.
  * @hide
  */
-public class AppTaskControllerImpl implements AppTaskController, DecorWindowInsetsCallback {
-    private static final String TAG = "AppTaskControllerImpl";
+public class WmShellAppTaskController implements AppTaskController, DecorWindowInsetsCallback {
+    private static final String TAG = "WmShellAppTaskController";
 
     private AppTaskStatusListener mStatusListener;
     private ActivityManager.RunningTaskInfo mTaskInfo;
@@ -206,35 +206,13 @@ public class AppTaskControllerImpl implements AppTaskController, DecorWindowInse
                         @Override
                         public void hideStatusBarNavigationBar() {
                             Log.d(TAG, "SystemBarController: hideStatusBarNavigationBar");
-                            if (mDecorView != null) {
-                                mDecorView.post(() -> {
-                                    if (mDecorView.isAttachedToWindow()) {
-                                        try {
-                                            mDecorView.hideStatusBarNavigationBar();
-                                            Log.i(TAG, "System bars hidden via controller");
-                                        } catch (Exception e) {
-                                            Log.e(TAG, "Failed to hide system bars", e);
-                                        }
-                                    }
-                                });
-                            }
+                            toggleStatusBarNavigationBar(true);
                         }
 
                         @Override
                         public void showStatusBarNavigationBar() {
                             Log.d(TAG, "SystemBarController: showStatusBarNavigationBar");
-                            if (mDecorView != null) {
-                                mDecorView.post(() -> {
-                                    if (mDecorView.isAttachedToWindow()) {
-                                        try {
-                                            mDecorView.showStatusBarNavigationBar();
-                                            Log.i(TAG, "System bars shown via controller");
-                                        } catch (Exception e) {
-                                            Log.e(TAG, "Failed to show system bars", e);
-                                        }
-                                    }
-                                });
-                            }
+                            toggleStatusBarNavigationBar(false);
                         }
                     });
 
@@ -297,14 +275,12 @@ public class AppTaskControllerImpl implements AppTaskController, DecorWindowInse
         try {
             // Example implementation - adjust based on your actual API
             if (activity != null && activity.getWindow() != null) {
-                Window window = activity.getWindow();
-                // Use window attributes or configuration to determine mode
-                // return window.getAttributes().windowMode;
+                return activity.getResources().getConfiguration().windowConfiguration.getWindowingMode();
             }
         } catch (Exception e) {
             Log.e(TAG, "Error getting windowing mode", e);
         }
-        return AppTaskStatusListener.WINDOWING_MODE_FREEFORM;
+        return AppTaskStatusListener.WINDOWING_MODE_UNDEFINED;
     }
 
     /**
@@ -363,18 +339,33 @@ public class AppTaskControllerImpl implements AppTaskController, DecorWindowInse
             } else if (mWindowingMode == AppTaskStatusListener.WINDOWING_MODE_FREEFORM) {
                 Log.d(TAG, "Maximizing from freeform, hiding system bars");
                 callTaskOperation(TASK_CAPTION_OPERATION_MAXIMIZE);
-                if (mDecorView != null) {
-                    mDecorView.hideStatusBarNavigationBar();
-                }
+                toggleStatusBarNavigationBar(true);
             } else {
                 Log.d(TAG, "Hiding system bars");
-                if (mDecorView != null) {
-                    mDecorView.hideStatusBarNavigationBar();
-                }
+                toggleStatusBarNavigationBar(true);
             }
 
             // Trigger window decoration relayout
             callTaskOperation(TASK_CAPTION_OPERATION_WINDOWDECORATION_RELAYOUT);
+        }
+    }
+
+    public void toggleStatusBarNavigationBar(boolean hide){
+        if (mDecorView != null) {
+            mDecorView.post(() -> {
+                if (mDecorView.isAttachedToWindow()) {
+                    try {
+                        if(hide){
+                            mDecorView.hideStatusBarNavigationBar();
+                        } else {
+                            mDecorView.showStatusBarNavigationBar();
+                        }
+                        Log.i(TAG, "toggleStatusBarNavigationBar " + hide);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Failed to toggleStatusBarNavigationBar", e);
+                    }
+                }
+            });
         }
     }
 
@@ -452,7 +443,7 @@ public class AppTaskControllerImpl implements AppTaskController, DecorWindowInse
      *
      * @param operation The operation code to execute
      */
-    private void callTaskOperation(int operation) {
+    public void callTaskOperation(int operation) {
         Log.d(TAG, "Calling task operation: " + operation);
 
         synchronized (mLock) {
@@ -480,7 +471,7 @@ public class AppTaskControllerImpl implements AppTaskController, DecorWindowInse
      * This should be called when the activity is destroyed.
      */
     public void cleanup() {
-        Log.i(TAG, "Cleaning up AppTaskControllerImpl");
+        Log.i(TAG, "Cleaning up WmShellAppTaskController");
 
         // Unregister system bar controller
         if (mTaskInfo != null) {
@@ -507,7 +498,7 @@ public class AppTaskControllerImpl implements AppTaskController, DecorWindowInse
         mActivity = null;
         mLinkedToWMshell = false;
 
-        Log.i(TAG, "AppTaskControllerImpl cleanup completed");
+        Log.i(TAG, "WmShellAppTaskController cleanup completed");
     }
 
     /**
