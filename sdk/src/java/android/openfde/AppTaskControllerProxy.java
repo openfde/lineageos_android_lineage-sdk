@@ -72,7 +72,7 @@ public class AppTaskControllerProxy {
         return mSystemBarOperator;
     }
 
-    public WmShellCaller getSystemBarOperator(){
+    public WmShellCaller getmWmShellCaller(){
         if(mWmShellCaller == null){
             mWmShellCaller = new WmShellCaller(){
                 @Override
