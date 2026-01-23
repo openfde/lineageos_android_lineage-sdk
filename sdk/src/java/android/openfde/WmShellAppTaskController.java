@@ -278,6 +278,9 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         try {
             // Example implementation - adjust based on your actual API
             if (activity != null && activity.getWindow() != null) {
+                if(activity.getResources().getConfiguration().windowConfiguration.getWindowingMode() == 6){
+                    return AppTaskStatusListener.WINDOWING_MODE_FULLSCREEN;
+                }
                 return activity.getResources().getConfiguration().windowConfiguration.getWindowingMode();
             }
         } catch (Exception e) {
