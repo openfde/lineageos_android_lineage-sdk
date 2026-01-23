@@ -408,6 +408,10 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         updateSystemBarController(null);
         // Notify status change
         onStatusChanged();
+        if (mTaskInfo != null) {
+            mTaskInfo.taskSystembarVisiblity = getSystemBarVisibility();
+            Log.d(TAG, "onApplyWindowInsets taskSystembarVisiblity:" + mTaskInfo.taskSystembarVisiblity);
+        }
     }
 
     /**
