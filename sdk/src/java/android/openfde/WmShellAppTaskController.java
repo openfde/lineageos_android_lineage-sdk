@@ -107,9 +107,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         mWindowingMode = getCurrentWindowingMode(activity.get());
         mSystemBarVisibility = getSystemBarVisibility();
         Log.d(TAG, "mSystemBarVisibility:" + mSystemBarVisibility + " taskSystembarVisiblity:" + mTaskInfo.taskSystembarVisiblity);
-        if(mTaskInfo != null && mSystemBarVisibility != mTaskInfo.taskSystembarVisiblity){
-            enterOrExitFullscreen();
-        }
+
 
         mLinkedToWMshell = true;
         Log.i(TAG, "Custom caption initialized successfully");
@@ -409,6 +407,9 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         // Notify status change
         onStatusChanged();
         if (mTaskInfo != null) {
+            if( mSystemBarVisibility != mTaskInfo.taskSystembarVisiblity){
+                enterOrExitFullscreen();
+            }
             mTaskInfo.taskSystembarVisiblity = getSystemBarVisibility();
             Log.d(TAG, "onApplyWindowInsets taskSystembarVisiblity:" + mTaskInfo.taskSystembarVisiblity);
         }
