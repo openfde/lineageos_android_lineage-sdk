@@ -106,6 +106,9 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         // Get initial state
         mWindowingMode = getCurrentWindowingMode(activity.get());
         mSystemBarVisibility = getSystemBarVisibility();
+        if(mTaskInfo != null && mSystemBarVisibility != mTaskInfo.taskSystembarVisiblity){
+            toggleStatusBarNavigationBar(!mSystemBarVisibility);
+        }
 
         mLinkedToWMshell = true;
         Log.i(TAG, "Custom caption initialized successfully");
@@ -486,6 +489,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
 
         // Unregister system bar controller
         if (mTaskInfo != null) {
+            mTaskInfo.taskSystembarVisiblity = getSystemBarVisibility();
             try {
                 mServiceWrapper.unregisterSystemBarController(mTaskInfo.taskId);
                 Log.d(TAG, "System bar controller unregistered");
