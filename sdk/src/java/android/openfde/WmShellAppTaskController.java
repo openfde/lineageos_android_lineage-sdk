@@ -106,8 +106,9 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         // Get initial state
         mWindowingMode = getCurrentWindowingMode(activity.get());
         mSystemBarVisibility = getSystemBarVisibility();
+        Log.d(TAG, "mSystemBarVisibility:" + mSystemBarVisibility + " taskSystembarVisiblity:" + mTaskInfo.taskSystembarVisiblity);
         if(mTaskInfo != null && mSystemBarVisibility != mTaskInfo.taskSystembarVisiblity){
-            toggleStatusBarNavigationBar(!mSystemBarVisibility);
+            enterOrExitFullscreen();
         }
 
         mLinkedToWMshell = true;
@@ -490,6 +491,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         // Unregister system bar controller
         if (mTaskInfo != null) {
             mTaskInfo.taskSystembarVisiblity = getSystemBarVisibility();
+            Log.d(TAG, "cleanup taskSystembarVisiblity:" + mTaskInfo.taskSystembarVisiblity);
             try {
                 mServiceWrapper.unregisterSystemBarController(mTaskInfo.taskId);
                 Log.d(TAG, "System bar controller unregistered");
