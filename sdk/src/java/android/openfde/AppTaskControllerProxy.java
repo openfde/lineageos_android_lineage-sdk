@@ -37,11 +37,11 @@ public class AppTaskControllerProxy {
         mImpl.back();
     }
 
-    private void toggleStatusBarNavigationBar(boolean hide){
+    public void toggleStatusBarNavigationBar(boolean hide){
         mImpl.toggleStatusBarNavigationBar(hide);
     }
 
-    private void callTaskOperation(int opCode){
+    public void callTaskOperation(int opCode){
         mImpl.callTaskOperation(opCode);
     }
     public void minimize() {
