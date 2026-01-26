@@ -408,7 +408,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         onStatusChanged();
         if (mTaskInfo != null) {
             if( mSystemBarVisibility != mTaskInfo.taskSystembarVisiblity){
-                enterOrExitFullscreen();
+                toggleStatusBarNavigationBar(mSystemBarVisibility);
             }
             mTaskInfo.taskSystembarVisiblity = getSystemBarVisibility();
             Log.d(TAG, "onApplyWindowInsets taskSystembarVisiblity:" + mTaskInfo.taskSystembarVisiblity);
