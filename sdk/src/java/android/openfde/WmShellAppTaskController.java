@@ -406,7 +406,8 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         updateSystemBarController(null);
 
         if(!mServiceWrapper.mSystemBarVisibilityComsumed && mServiceWrapper.getLocalSystemBarVisible() != getSystemBarVisibility()){
-            toggleStatusBarNavigationBar(getSystemBarVisibility());
+//            toggleStatusBarNavigationBar(getSystemBarVisibility());
+            enterOrExitFullscreen();
         }
         // Notify status change
         onStatusChanged();
