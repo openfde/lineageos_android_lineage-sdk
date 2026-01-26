@@ -433,7 +433,8 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
 
             Log.i(TAG, "New status - windowingMode: " + currentWindowingMode +
                     ", systemBarVisibility: " + systemBarVisibility);
-            if(mServiceWrapper.mSystemBarVisibilityComsumed){
+            if(mServiceWrapper.mSystemBarVisibilityComsumed &&
+                    currentWindowingMode == AppTaskStatusListener.WINDOWING_MODE_FULLSCREEN){
                 mServiceWrapper.setLocalSystemBarVisiblity(systemBarVisibility);
             }
 
