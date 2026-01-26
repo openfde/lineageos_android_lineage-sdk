@@ -147,7 +147,6 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
             displayId = display.getDisplayId();
         }
 
-        boolean systemBarVisibility = true;
         try {
             if (mServiceWrapper.isStatusBarServiceAvailable()) {
                 boolean statusBarVisible = mServiceWrapper.getStatusBarService()
@@ -155,8 +154,8 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
                 boolean navigationBarVisible = mServiceWrapper.getStatusBarService()
                         .getSystemBarVisibility(displayId, WINDOW_NAVIGATION_BAR);
 
-                systemBarVisibility = statusBarVisible && navigationBarVisible;
-                Log.v(TAG, "System bar visibility - status: " + statusBarVisible +
+                mSystemBarVisibility = statusBarVisible && navigationBarVisible;
+                Log.d(TAG, "System bar visibility - status: " + statusBarVisible +
                         ", navigation: " + navigationBarVisible);
             } else {
                 Log.w(TAG, "Status bar service not available");
@@ -165,7 +164,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
             Log.e(TAG, "Failed to get system bar visibility", ex);
         }
 
-        return systemBarVisibility;
+        return mSystemBarVisibility;
     }
 
     /**
