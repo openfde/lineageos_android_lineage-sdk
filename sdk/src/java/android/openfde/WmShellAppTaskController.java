@@ -113,7 +113,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
     }
 
     public void reinit(){
-        initCustomCaption(mActivity, listener, mIsRawCaptionHidden);
+        initCustomCaption(mActivity, mStatusListener, mIsRawCaptionHidden);
     }
 
     /**
