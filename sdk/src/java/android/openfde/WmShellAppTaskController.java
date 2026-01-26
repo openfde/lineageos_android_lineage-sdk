@@ -97,7 +97,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         if (mDecorView == null) {
             throw new IllegalArgumentException("mDecorView is null. must after setContentView");
         }
-
+        mServiceWrapper.reset();
         mDecorView.setWindowInsetsCallback(this);
 
         // Update system bar controller
@@ -406,10 +406,10 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         updateSystemBarController(null);
         // Notify status change
         onStatusChanged();
-        if (mTaskInfo != null) {
-            mTaskInfo.taskSystembarVisiblity = getSystemBarVisibility();
-            Log.d(TAG, "onApplyWindowInsets taskSystembarVisiblity:" + mTaskInfo.taskSystembarVisiblity);
+        if(!mServiceWrapper.mSystemBarVisibilityComsumed && mServiceWrapper.getLocalSystemBarVisible() != getSystemBarVisibility()){
+            toggleStatusBarNavigationBar(getSystemBarVisibility());
         }
+        Log.d(TAG, "onApplyWindowInsets getLocalSystemBarVisible:" + mServiceWrapper.getLocalSystemBarVisible());
     }
 
     /**
