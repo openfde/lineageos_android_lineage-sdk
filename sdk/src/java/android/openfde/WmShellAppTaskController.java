@@ -416,6 +416,10 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         updateSystemBarController(null);
         // Notify status change
         onStatusChanged();
+        if(getSystemBarVisibilityStatus() !=
+                getSystemBarVisibleByInsetControl()){
+            enterOrExitFullscreen();
+        }
     }
 
     /**
