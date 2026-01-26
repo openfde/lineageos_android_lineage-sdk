@@ -97,7 +97,6 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         if (mDecorView == null) {
             throw new IllegalArgumentException("mDecorView is null. must after setContentView");
         }
-        mServiceWrapper.reset();
         mDecorView.setWindowInsetsCallback(this);
 
         // Update system bar controller
@@ -111,6 +110,10 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
 
         mLinkedToWMshell = true;
         Log.i(TAG, "Custom caption initialized successfully");
+    }
+
+    public void reinit(){
+        initCustomCaption(mActivity, listener, mIsRawCaptionHidden);
     }
 
     /**
@@ -358,6 +361,14 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         }
     }
 
+    public void setSystemBarVisibleByInsetControl(boolean visible){
+        mServiceWrapper.setLocalSystemBarVisiblity(visible);
+    }
+
+    public boolean getSystemBarVisibleByInsetControl(){
+        return mServiceWrapper.getLocalSystemBarVisiblity();
+    }
+
     public void toggleStatusBarNavigationBar(boolean hide){
         if (mDecorView != null) {
             mDecorView.post(() -> {
@@ -404,14 +415,8 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         Log.d(TAG, "Window insets applied");
         // Update system bar controller when window insets change
         updateSystemBarController(null);
-
-        if(!mServiceWrapper.mSystemBarVisibilityComsumed && mServiceWrapper.getLocalSystemBarVisible() != getSystemBarVisibility()){
-//            toggleStatusBarNavigationBar(getSystemBarVisibility());
-            enterOrExitFullscreen();
-        }
         // Notify status change
         onStatusChanged();
-        Log.d(TAG, "onApplyWindowInsets getLocalSystemBarVisible:" + mServiceWrapper.getLocalSystemBarVisible());
     }
 
     /**
@@ -433,11 +438,6 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
 
             Log.i(TAG, "New status - windowingMode: " + currentWindowingMode +
                     ", systemBarVisibility: " + systemBarVisibility);
-            if(mServiceWrapper.mSystemBarVisibilityComsumed &&
-                    currentWindowingMode == AppTaskStatusListener.WINDOWING_MODE_FULLSCREEN){
-                mServiceWrapper.setLocalSystemBarVisiblity(systemBarVisibility);
-            }
-
             if (mStatusListener != null) {
                 try {
                     mStatusListener.onStatusChanged(currentWindowingMode, systemBarVisibility);
