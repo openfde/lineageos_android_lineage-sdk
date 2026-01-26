@@ -407,9 +407,6 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         // Notify status change
         onStatusChanged();
         if (mTaskInfo != null) {
-            if( mSystemBarVisibility != mTaskInfo.taskSystembarVisiblity){
-                toggleStatusBarNavigationBar(mSystemBarVisibility);
-            }
             mTaskInfo.taskSystembarVisiblity = getSystemBarVisibility();
             Log.d(TAG, "onApplyWindowInsets taskSystembarVisiblity:" + mTaskInfo.taskSystembarVisiblity);
         }
