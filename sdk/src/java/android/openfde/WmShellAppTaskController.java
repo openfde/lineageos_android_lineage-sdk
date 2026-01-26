@@ -404,11 +404,12 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
         Log.d(TAG, "Window insets applied");
         // Update system bar controller when window insets change
         updateSystemBarController(null);
-        // Notify status change
-        onStatusChanged();
+
         if(!mServiceWrapper.mSystemBarVisibilityComsumed && mServiceWrapper.getLocalSystemBarVisible() != getSystemBarVisibility()){
             toggleStatusBarNavigationBar(getSystemBarVisibility());
         }
+        // Notify status change
+        onStatusChanged();
         Log.d(TAG, "onApplyWindowInsets getLocalSystemBarVisible:" + mServiceWrapper.getLocalSystemBarVisible());
     }
 
@@ -431,6 +432,9 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
 
             Log.i(TAG, "New status - windowingMode: " + currentWindowingMode +
                     ", systemBarVisibility: " + systemBarVisibility);
+            if(mServiceWrapper.mSystemBarVisibilityComsumed){
+                mServiceWrapper.setLocalSystemBarVisiblity(systemBarVisibility);
+            }
 
             if (mStatusListener != null) {
                 try {
