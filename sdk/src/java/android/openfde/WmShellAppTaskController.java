@@ -23,7 +23,6 @@ import com.android.internal.policy.SystemBarController;
  * AppTaskControllerImpl - Implementation of AppTaskController interface.
  * Manages task operations and system bar controls for windowed applications.
  * Works in conjunction with TaskRemoteServiceWrapper for remote service operations.
- * @hide
  */
 public class WmShellAppTaskController implements AppTaskController, DecorWindowInsetsCallback {
     private static final String TAG = "WmShellAppTaskController";

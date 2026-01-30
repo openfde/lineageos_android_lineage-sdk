@@ -25,7 +25,6 @@ import java.lang.ref.WeakReference;
  * * <p><b>Advanced Usage:</b> Developers can combine {@link #callTaskOperation(int)}
  * and {@link #toggleStatusBarNavigationBar(boolean)} to implement custom behaviors
  * or synchronized UI updates for the title bar.</p>
- * * @hide
  */
 public class AppTaskControllerProxy {
 

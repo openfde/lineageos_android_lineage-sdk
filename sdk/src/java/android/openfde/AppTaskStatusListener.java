@@ -6,7 +6,6 @@ package android.openfde;
  * Implementations can track transitions between window modes (e.g., Freeform vs. Fullscreen)
  * and respond to changes in system UI visibility.
  * </p>
- * @hide
  */
 public interface AppTaskStatusListener {
 
