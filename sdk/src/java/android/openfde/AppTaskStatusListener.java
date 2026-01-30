@@ -1,46 +1,50 @@
 package android.openfde;
 
+import android.annotation.FlaggedApi;
+import android.annotation.NonNull;
+
 /**
  * Listener interface for monitoring changes in application task status and windowing configuration.
- * <p>
- * Implementations can track transitions between window modes (e.g., Freeform vs. Fullscreen)
- * and respond to changes in system UI visibility.
- * </p>
- * @hide
  */
+@FlaggedApi("android.openfde.openfde_api")
 public interface AppTaskStatusListener {
 
     /** Indicates the windowing mode is not explicitly defined. */
-    public static final int WINDOWING_MODE_UNDEFINED = 0;
+    @FlaggedApi("android.openfde.openfde_api")
+    int WINDOWING_MODE_UNDEFINED = 0;
 
     /** Indicates the task is in standard fullscreen mode. */
-    public static final int WINDOWING_MODE_FULLSCREEN = 1;
+    @FlaggedApi("android.openfde.openfde_api")
+    int WINDOWING_MODE_FULLSCREEN = 1;
 
     /** Indicates the task is in a floating, resizable freeform window. */
-    public static final int WINDOWING_MODE_FREEFORM = 5;
+    @FlaggedApi("android.openfde.openfde_api")
+    int WINDOWING_MODE_FREEFORM = 5;
 
     /**
      * Called when the task windowing mode or system bar visibility changes.
-     * * @param windowingMode The current windowing mode (e.g., {@link #WINDOWING_MODE_FULLSCREEN}).
+     *
+     * @param windowingMode The current windowing mode.
      * @param isSystemBarVisible {@code true} if the Status/Navigation bars are currently shown.
      */
+    @FlaggedApi("android.openfde.openfde_api")
     void onStatusChanged(int windowingMode, boolean isSystemBarVisible);
 
     /**
      * Helper method to retrieve a human-readable description of the current task state.
-     * * @param windowingMode The current windowing mode.
+     *
+     * @param windowingMode The current windowing mode.
      * @param isSystemBarVisible The current system bar visibility state.
-     * @return A string representing the UI state, such as "freeform" or "real fullscreen".
+     * @return A string representing the UI state.
      */
-    default String getStatus(int windowingMode, boolean isSystemBarVisible){
+    @NonNull // 1. 必须标记返回值不为 null
+    @FlaggedApi("android.openfde.openfde_api")
+    default String onGetStatus(int windowingMode, boolean isSystemBarVisible){
         if(windowingMode == WINDOWING_MODE_FULLSCREEN && isSystemBarVisible){
-            // Fullscreen mode but bars are visible, typically behaving like a maximized window
             return "fullscreen just maximize";
         } else if( windowingMode == WINDOWING_MODE_FREEFORM ){
-            // Standard windowed/resizable mode
             return "freeform";
         } else if( windowingMode == WINDOWING_MODE_FULLSCREEN ){
-            // Fullscreen mode with bars hidden
             return "real fullscreen";
         }
         return "undefined";
@@ -48,10 +52,13 @@ public interface AppTaskStatusListener {
 
     /**
      * Generates a unique identifier for the listener instance.
-     * Useful for debugging and logging purposes.
-     * * @return A unique string ID based on the class name and hash code.
+     *
+     * @return A unique string ID.
      */
-    default String getListenerId() {
-        return getClass().getSimpleName() + "@" + hashCode();
+    @NonNull // 3. 标记返回值不为 null
+    @FlaggedApi("android.openfde.openfde_api")
+    // 4. 更名：getListenerId -> onGetListenerId
+    default String onGetListenerId() {
+        return getClass().getSimpleName() + "@" + Integer.toHexString(hashCode());
     }
 }
