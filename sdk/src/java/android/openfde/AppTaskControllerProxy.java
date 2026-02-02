@@ -68,8 +68,8 @@ public class AppTaskControllerProxy {
     /**
      * Closes the current application task.
      */
-    public void close() {
-        mImpl.close();
+    public void closeTask() {
+        mImpl.closeTask();
     }
 
     /**
