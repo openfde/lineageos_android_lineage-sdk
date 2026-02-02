@@ -203,32 +203,3 @@ java_library {
 // The openfde SDK
 // ============================================================
 
-java_library {
-    name: "openfde_sdk",
-    srcs: [
-           "sdk/src/java/android/openfde/AppTaskControllerProxy.java",
-           "sdk/src/java/android/openfde/AppTaskStatusListener.java",
-           "sdk/src/java/android/openfde/SystemBarOperator.java",
-           "sdk/src/java/android/openfde/WmShellCaller.java",
-    ],
-
-    platform_apis: true,
-
-    libs: [
-        "framework",
-    ],
-
-    installable: false,
-}
-
-filegroup {
-    name: "openfde-sdk-sources",
-    srcs: [
-           "sdk/src/java/android/openfde/AppTaskControllerProxy.java",
-           "sdk/src/java/android/openfde/AppTaskStatusListener.java",
-           "sdk/src/java/android/openfde/SystemBarOperator.java",
-           "sdk/src/java/android/openfde/WmShellAppTaskController.java",
-           "sdk/src/java/android/openfde/WmShellCaller.java",
-    ],
-    visibility: ["//frameworks/base"],
-}
