@@ -317,7 +317,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
     }
 
     @Override
-    public void close() {
+    public void closeTask() {
         Log.i(TAG, "Closing task");
         callTaskOperation(TASK_CAPTION_OPERATION_CLOSE);
     }
