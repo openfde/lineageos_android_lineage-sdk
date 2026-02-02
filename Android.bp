@@ -220,15 +220,3 @@ java_library {
 
     installable: false,
 }
-
-filegroup {
-    name: "openfde-sdk-sources",
-    srcs: [
-           "sdk/src/java/android/openfde/AppTaskControllerProxy.java",
-           "sdk/src/java/android/openfde/AppTaskStatusListener.java",
-           "sdk/src/java/android/openfde/SystemBarOperator.java",
-           "sdk/src/java/android/openfde/WmShellAppTaskController.java",
-           "sdk/src/java/android/openfde/WmShellCaller.java",
-    ],
-    visibility: ["//frameworks/base"],
-}

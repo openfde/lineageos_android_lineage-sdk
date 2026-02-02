@@ -318,7 +318,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
     }
 
     @Override
-    public void close() {
+    public void closeTask() {
         Log.i(TAG, "Closing task");
         callTaskOperation(TASK_CAPTION_OPERATION_CLOSE);
     }
@@ -544,7 +544,7 @@ public class WmShellAppTaskController implements AppTaskController, DecorWindowI
 
     public String getStatus() {
         if (mStatusListener != null) {
-            return mStatusListener.getStatus(mWindowingMode, mSystemBarVisibility);
+            return mStatusListener.onGetStatus(mWindowingMode, mSystemBarVisibility);
         }
         return "windowmode:" + mWindowingMode + "|systembar:" + mSystemBarVisibility;
     }
