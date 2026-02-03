@@ -551,7 +551,7 @@ public class WayDroidService extends LineageSystemService {
             Log.w(TAG, "compatbileGet " + packageName + ",activityName "+activityName + ",keyCode "+keyCode);
             if (mContext == null)
                 return null;
-            String res = CompatibleConfig.queryValueDataBySharedMemory(mContext,packageName,activityName,keyCode);
+            String res = CompatibleConfig.queryStringValueData(mContext,keyCode,packageName,activityName);
             Log.w(TAG,"getCompatibleConfig res: "+res);
             return res;   
         }
