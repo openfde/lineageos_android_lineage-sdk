@@ -220,3 +220,20 @@ java_library {
 
     installable: false,
 }
+
+java_library {
+    name: "org.lineageos.platform.bluetooth",
+    min_sdk_version: "30",
+    platform_apis: true,
+    sdk_version: "module_current",
+
+    srcs: [
+        "sdk/src/java/android/openfde/Bluetooth.java",
+        "sdk/src/java/android/openfde/IBluetooth.aidl",
+        "sdk/src/java/android/openfde/IBluetoothCallback.aidl",
+    ],
+
+    apex_available: [
+        "com.android.btservices",
+    ],
+}
