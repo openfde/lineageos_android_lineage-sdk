@@ -44,7 +44,8 @@ public class Bluetooth {
         DEVICE_FOUND,
         DEVICE_PROPERTY_CHANGED,
         BOND_STATE_CHANGE,
-        FROFILE_CONNECTION_STATE_CHANGED
+        FROFILE_CONNECTION_STATE_CHANGED,
+        PIN_REQUEST
     }
     public interface EventListener {
         void onEvent(int what, String data);
