@@ -111,6 +111,7 @@ public class WayDroidService extends LineageSystemService {
         }
         if (mUM != null) {
             registerPackageMonitor();
+            mUM.userUnlocked(0);
         }
     }
 
@@ -127,7 +128,8 @@ public class WayDroidService extends LineageSystemService {
             saveApplicationIcon(appInfo.packageName);
         }
         if (mUM != null) {
-            mUM.userUnlocked(targetUser.getUserIdentifier());
+            Log.w(TAG, "userUnlocked: id=" + targetUser.getUserIdentifier());
+//            mUM.userUnlocked(targetUser.getUserIdentifier());
         }
         Intent homeIntent = new Intent(Intent.ACTION_MAIN);
         homeIntent.addCategory(Intent.CATEGORY_HOME);
